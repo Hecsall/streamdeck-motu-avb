@@ -21,7 +21,7 @@ MOTU AVB Audio Interface Plugin for Stream Deck
 
     ```sh
     # Command Prompt
-    mklink /D C:\Users\%USER%\AppData\Roaming\Elgato\StreamDeck\Plugins src\com.simonedenadai.motu-av.sdPlugin
+    mklink /D C:\Users\%USER%\AppData\Roaming\Elgato\StreamDeck\Plugins src\com.simonedenadai.motu-avb.sdPlugin
     ```
 
 - Close and reopen the Stream Deck software then open [http://localhost:23654/](http://localhost:23654/) on your browser.
