@@ -1,8 +1,10 @@
 {
-  "Description": "Use this to create your own plugin", 
-  "Name": "Stream Deck Template", 
-  "Category": "Templates", 
-  "com.simonedenadai.motu-avb.action": {
+  "Description": "Remote control for MOTU AVB Audio Interfaces",
+  "com.simonedenadai.motu-avb.mute": {
+    "Name": "Mute", 
+    "Tooltip": "Mute/Unmute a channel"
+  },
+  "com.simonedenadai.motu-avb.template": {
     "Name": "Action", 
     "Tooltip": "This is the only action in this plugin"
   },

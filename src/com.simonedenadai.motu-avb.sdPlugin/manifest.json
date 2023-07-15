@@ -1,12 +1,12 @@
 {
 	"SDKVersion": 2,
-	"Author": "Elgato Systems",
+	"Author": "Simone De Nadai",
 	"CodePath": "app.html",
-	"Description": "Example description",
-	"Name": "Stream Deck Template",
+	"Description": "Remote control for MOTU AVB Audio Interfaces",
+	"Name": "MOTU AVB",
 	"Icon": "actions/template/assets/action",
-	"URL": "https://www.elgato.com/en/gaming/stream-deck",
-	"Version": "1.0.2",
+	"URL": "https://github.com/Hecsall/streamdeck-motu-avb",
+	"Version": "1.0.0",
 	"Software": {
 		"MinimumVersion": "5.0"
 	},
@@ -20,9 +20,22 @@
 			"MinimumVersion": "10"
 		}
 	],
-	"Category": "Template Plugin",
+	"Category": "MOTU AVB",
 	"CategoryIcon": "actions/template/assets/actionimage",
 	"Actions": [
+		{
+			"Icon": "actions/mute/assets/actionimage",
+			"Name": "Mute",
+			"Controllers": ["Keypad"],
+			"States": [
+				{
+					"Image": "actions/mute/assets/action"
+				}
+			],
+			"Tooltip": "Mute/Unmute a channel",
+			"UUID": "com.simonedenadai.motu-avb.mute",
+			"PropertyInspectorPath": "actions/mute/property-inspector/inspector.html"
+		},
 		{
 			"Icon": "actions/template/assets/actionimage",
 			"Name": "Example Action",
@@ -42,7 +55,7 @@
 				}
 			],
 			"Tooltip": "This is an example tooltip",
-			"UUID": "com.simonedenadai.motu-avb.action",
+			"UUID": "com.simonedenadai.motu-avb.template",
 			"PropertyInspectorPath": "actions/template/property-inspector/inspector.html"
 		}
 	]
