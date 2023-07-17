@@ -1,7 +1,7 @@
 {
   "Description": "Remote control for MOTU AVB Audio Interfaces",
   "com.simonedenadai.motu-avb.mute": {
-    "Name": "Mute", 
+    "Name": "Toggle Mute", 
     "Tooltip": "Mute/Unmute a channel"
   },
   "com.simonedenadai.motu-avb.template": {
@@ -9,14 +9,10 @@
     "Tooltip": "This is the only action in this plugin"
   },
   "Localization": {
-    "More info": "More info",
-    "Message": "Message",
-    "Click Me": "Click Me",
-    "Button": "Button",
-    "More": "More",
-    "My name": "My name",
-    "My title": "My title",
-    "My message": "My message",
-    "My button": "My button"
+    "Channel": "Channel",
+    "Connect": "Connect",
+    "Configuration": "Configuration",
+    "Click to Connect": "Click to Connect",
+    "-- Select --": "-- Select --"
   }
 }

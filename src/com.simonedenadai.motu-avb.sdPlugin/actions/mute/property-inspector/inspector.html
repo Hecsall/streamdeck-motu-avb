@@ -10,53 +10,49 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <title>com.simonedenadai.motu-avb Property Inspector</title>
     <link rel="stylesheet" href="../../../libs/css/sdpi.css" />
+    <link rel="stylesheet" href="../../../custom.css" />
 </head>
 
 <body>
     <div class="sdpi-wrapper">
-        <div type="tabs" class="sdpi-item">
-            <div class="sdpi-item-label empty"></div>
-            <div class="tabs">
-                <div class="tab selected" data-target="#tab1" title="Show some inputs">Inputs</div>
-                <div class="tab" data-target="#tab2" title="Here's some text-areas">Text</div>
-            </div>
-        </div>
-        <hr class="tab-separator">
-        <form id="property-inspector">
-            <div id="tab1" class="tab-container">
-                <div class="sdpi-item">
-                    <div data-localize class="sdpi-item-label" title="My name">Name</div>
-                    <input data-localize class="sdpi-item-value" name="name" type="text" value="" placeholder="Click Me" />
-                </div>
+    
+        <!-- GLOBAL SETTINGS -->
+        <!-- --------------- -->
 
-                <div type="textarea" class="sdpi-item">
-                    <div class="sdpi-item-label" data-localize title="My message">Message</div>
-                    <div class="sdpi-item-value textarea">
-                        <textarea
-                                  name="message"
-                                  type="textarea"
-                                  maxlength="50"
-                                  class="three-lines"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div id="tab2" class="tab-container">
-                <div class="sdpi-item">
-                    <div data-localize class="sdpi-item-label" title="More">More</div>
-                    <input data-localize class="sdpi-item-value" name="more" type="text" value="" placeholder="More info" />
-                </div>
+        <div class="sdpi-heading">API Connection</div>
+
+        <div class="sdpi-item">
+            <div class="sdpi-item-label" title="API URL">API URL</div>
+            <input
+                class="sdpi-item-value"
+                id="api_url"
+                name="api_url"
+                type="text"
+                value=""
+                required
+                pattern="https?:\/\/(?:w{1,3}\.)?[^\s.]+(?:\.[a-z]+)*(?::\d+)?(?![^<]*(?:<\/\w+>|\/?>))"
+                placeholder="http://localhost:1280/aaaaa11111/datastore" />
+        </div>
+
+        <div class="sdpi-item">
+            <div class="sdpi-item-label" data-localize>Connect</div>
+            <button class="sdpi-item-value" id="api_save_button" data-localize>Click to Connect</button>
+        </div>
+
+
+        <!-- ACTION SETTINGS -->
+        <!-- --------------- -->
+
+        <div class="sdpi-heading" data-localize>Configuration</div>
+
+        <form id="property-inspector"> 
+            <div class="sdpi-item" type="select">
+                <div data-localize class="sdpi-item-label" title="Channel">Channel</div>
+                <select class="sdpi-item-value" name="motu_target" id="motu_target">
+                    <option disabled selected value data-localize="">-- Select --</option>
+                </select>
             </div>
         </form>
-        <div class="sdpi-item">
-            <div class="sdpi-item-label" data-localize title="My button">Button</div>
-            <button
-                    class="sdpi-item-value"
-                    value="Click Me"
-                    data-localize
-                    id="open-external">
-                Click Me
-            </button>
-        </div>
     </div>
 
     <div class="sdpi-info-label hidden" style="top: -1000" value=""></div>
@@ -70,8 +66,9 @@
     <script src="../../../libs/js/api.js"></script>
     <script src="../../../libs/js/property-inspector.js"></script>
     <script src="../../../libs/js/dynamic-styles.js"></script>
-
+    
     <!-- Property Inspector Source -->
+    <script src="../../../pi_common.js"></script>
     <script src="inspector.js"></script>
 </body>
 

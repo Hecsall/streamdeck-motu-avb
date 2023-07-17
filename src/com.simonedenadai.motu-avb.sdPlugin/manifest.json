@@ -25,11 +25,16 @@
 	"Actions": [
 		{
 			"Icon": "actions/mute/assets/actionimage",
-			"Name": "Mute",
+			"Name": "Toggle Mute",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/mute/assets/action"
+					"Image": "actions/mute/assets/action",
+					"Name": "Mute"
+				},
+				{
+					"Image": "actions/mute/assets/action",
+					"Name": "Unmute"
 				}
 			],
 			"Tooltip": "Mute/Unmute a channel",
