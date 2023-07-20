@@ -5,26 +5,6 @@ const muteAction = new Action('com.simonedenadai.motu-avb.mute');
 
 let globalSettings = {};
 
-async function createDatastore() {
-    const datastore = await fetchMOTU()
-    if (datastore) {
-        const newGlobalSettings = {
-            ...globalSettings,
-            datastore: datastore
-        }
-        $SD.setGlobalSettings(newGlobalSettings);
-        globalSettings = newGlobalSettings;
-    }
-}
-
-
-async function getOrCreateDatastore() {
-    if (!globalSettings.datastore) {
-        await createDatastore();
-    }
-    return globalSettings?.datastore
-}
-
 
 function fetchMOTU() {
     return fetch(globalSettings?.api_url)
@@ -37,6 +17,22 @@ function fetchMOTU() {
                     return null;
             }
         })
+}
+
+
+async function getOrCreateDatastore() {
+    if (!globalSettings.datastore) {
+        const datastore = await fetchMOTU()
+        if (datastore) {
+            const newGlobalSettings = {
+                ...globalSettings,
+                datastore: datastore
+            }
+            $SD.setGlobalSettings(newGlobalSettings);
+            globalSettings = newGlobalSettings;
+        }
+    }
+    return globalSettings?.datastore
 }
 
 
@@ -64,7 +60,7 @@ function sendToMOTU(endpoint, value) {
 $SD.onConnected(({ actionInfo, appInfo, connection, messageType, port, uuid }) => {
 	console.log('Stream Deck connected!');
     // $SD.setGlobalSettings({}); // Used to clean global settings
-	$SD.getGlobalSettings($SD.uuid);
+	$SD.getGlobalSettings(uuid);
 });
 
 
@@ -76,7 +72,7 @@ $SD.on('didReceiveGlobalSettings', async (jsn) => {
         // If API URL is already set, fetch the entire
         // MOTU datastore to get some starting values.
         if (globalSettings.api_url) {
-            await createDatastore();
+            await getOrCreateDatastore();
         }
         console.log('cached the received global settings!');
         console.log(globalSettings);
@@ -116,7 +112,6 @@ muteAction.onKeyUp(async ({ action, context, device, event, payload }) => {
 
     const response = await sendToMOTU(motu_target, value)
     if (response.ok) {
-        console.log(response);
         globalSettings.datastore[motu_target] = parseInt(value)
         // If used from a MultiAction avoid changing the action state.
         if (!payload.isInMultiAction) {

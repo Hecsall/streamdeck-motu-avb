@@ -3,3 +3,8 @@ input:invalid {
     border: solid 1px red;
     box-sizing: border-box;
 }
+
+input.validated {
+    border: solid 1px green;
+    box-sizing: border-box;
+}

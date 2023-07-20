@@ -4,7 +4,7 @@
 	"CodePath": "app.html",
 	"Description": "Remote control for MOTU AVB Audio Interfaces",
 	"Name": "MOTU AVB",
-	"Icon": "actions/template/assets/action",
+	"Icon": "actions/mute/assets/action",
 	"URL": "https://github.com/Hecsall/streamdeck-motu-avb",
 	"Version": "1.0.0",
 	"Software": {
@@ -21,7 +21,7 @@
 		}
 	],
 	"Category": "MOTU AVB",
-	"CategoryIcon": "actions/template/assets/actionimage",
+	"CategoryIcon": "actions/mute/assets/actionimage",
 	"Actions": [
 		{
 			"Icon": "actions/mute/assets/actionimage",
@@ -40,28 +40,6 @@
 			"Tooltip": "Mute/Unmute a channel",
 			"UUID": "com.simonedenadai.motu-avb.mute",
 			"PropertyInspectorPath": "actions/mute/property-inspector/inspector.html"
-		},
-		{
-			"Icon": "actions/template/assets/actionimage",
-			"Name": "Example Action",
-			"Controllers": ["Keypad", "Encoder"],
-			"Encoder": {
-				"layout": "$B1",
-				"TriggerDescription": {
-					"Rotate": "Describe the rotation",
-					"Push": "Describe the encoder push",
-					"Touch": "Describe the touch",
-					"LongTouch": "Describe the long touch"
-				}
-			},
-			"States": [
-				{
-					"Image": "actions/template/assets/action"
-				}
-			],
-			"Tooltip": "This is an example tooltip",
-			"UUID": "com.simonedenadai.motu-avb.template",
-			"PropertyInspectorPath": "actions/template/property-inspector/inspector.html"
 		}
 	]
 }

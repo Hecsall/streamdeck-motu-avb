@@ -51,20 +51,6 @@ const updateUI = (settings) => {
    })
 }
 
-/**
- * Provide window level functions to use in the external window
- * (this can be removed if the external window is not used)
- */
-// window.sendToInspector = (data) => {
-//     console.log(data);
-// };
-
-// document.querySelector('#open-external').addEventListener('click', () => {
-//     window.open('../../../external.html');
-// });
-
-
-
 // $PI.sendToPlugin({ 
 //     key: apiUrl.id,
 //     value: value

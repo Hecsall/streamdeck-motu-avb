@@ -4,10 +4,6 @@
     "Name": "Toggle Mute", 
     "Tooltip": "Mute/Unmute a channel"
   },
-  "com.simonedenadai.motu-avb.template": {
-    "Name": "Action", 
-    "Tooltip": "This is the only action in this plugin"
-  },
   "Localization": {
     "Channel": "Channel",
     "Connect": "Connect",
