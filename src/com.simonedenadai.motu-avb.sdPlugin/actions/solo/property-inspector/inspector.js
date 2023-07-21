@@ -22,11 +22,10 @@ $PI.onConnected((jsn) => {
             $PI.setSettings(value);
         })
     );
-    
-    // Used inside piApiSettigns to find which MOTU channels to display inside the UI
-    window.selectableRegex = /(.*)\/mute$/;
 
-    // window.selectableChannels = '/mute';
+    // Used inside piApiSettigns to find which MOTU channels to display inside the UI
+    window.selectableRegex = /(.*)\/solo$/;
+
     // Set of common operations for all actions 
     // to handle the API URL input
     piApiSettings();

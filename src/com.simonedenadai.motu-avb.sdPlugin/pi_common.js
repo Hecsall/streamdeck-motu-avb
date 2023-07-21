@@ -1,5 +1,4 @@
 
-
 function piApiSettings() {
     const apiUrl = document.querySelector('#api_url');
     const apiSaveButton = document.querySelector('#api_save_button');
@@ -13,9 +12,11 @@ function piApiSettings() {
                 fetch(api_url.value).then((response) => {
                     switch (response.status) {
                         case 200:
-                            // If the URL is working we save it
+                            // If the URL is working we save it and we save the datastore
                             $PI.setGlobalSettings({
-                                [apiUrl.id]: apiUrl.value
+                                [apiUrl.id]: apiUrl.value,
+                                datastore: response.json(),
+                                datastoreUpdatedAt: new Date(),
                             });
                             apiUrl.classList.add('validated');
                             break;

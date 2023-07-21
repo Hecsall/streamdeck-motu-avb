@@ -40,6 +40,60 @@
 			"Tooltip": "Mute/Unmute a channel",
 			"UUID": "com.simonedenadai.motu-avb.mute",
 			"PropertyInspectorPath": "actions/mute/property-inspector/inspector.html"
+		},
+		{
+			"Icon": "actions/solo/assets/actionimage",
+			"Name": "Toggle Solo",
+			"Controllers": ["Keypad"],
+			"States": [
+				{
+					"Image": "actions/solo/assets/action",
+					"Name": "Solo"
+				},
+				{
+					"Image": "actions/solo/assets/action",
+					"Name": "Disable Solo"
+				}
+			],
+			"Tooltip": "Enable/Disable Solo on a channel",
+			"UUID": "com.simonedenadai.motu-avb.solo",
+			"PropertyInspectorPath": "actions/solo/property-inspector/inspector.html"
+		},
+		{
+			"Icon": "actions/reverb/assets/actionimage",
+			"Name": "Toggle Reverb",
+			"Controllers": ["Keypad"],
+			"States": [
+				{
+					"Image": "actions/reverb/assets/action",
+					"Name": "Enable Reverb"
+				},
+				{
+					"Image": "actions/reverb/assets/action",
+					"Name": "Disable Reverb"
+				}
+			],
+			"Tooltip": "Enable/Disable Reverb",
+			"UUID": "com.simonedenadai.motu-avb.reverb",
+			"PropertyInspectorPath": "actions/reverb/property-inspector/inspector.html"
+		},
+		{
+			"Icon": "actions/generic_bool/assets/actionimage",
+			"Name": "Toggle Generic Value",
+			"Controllers": ["Keypad"],
+			"States": [
+				{
+					"Image": "actions/generic_bool/assets/action",
+					"Name": "Enable"
+				},
+				{
+					"Image": "actions/generic_bool/assets/action",
+					"Name": "Disable"
+				}
+			],
+			"Tooltip": "Enable/Disable a generic channel (switches between 0 and 1)",
+			"UUID": "com.simonedenadai.motu-avb.generic_bool",
+			"PropertyInspectorPath": "actions/generic_bool/property-inspector/inspector.html"
 		}
 	]
 }
