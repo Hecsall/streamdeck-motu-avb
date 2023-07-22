@@ -7,3 +7,4 @@ package.json
 .history
 __exclude
 .editorconfig
+.DS_Store
