@@ -25,4 +25,10 @@ module.exports = {
         indent: ['error', 4],
         'no-multiple-empty-lines': ['error', { max: 2 }],
     },
+    globals: {
+        Action: true,
+        $SD: true,
+        Utils: true,
+        $PI: true,
+    },
 };
