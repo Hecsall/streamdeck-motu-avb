@@ -4,7 +4,7 @@ module.exports = {
         es2021: true,
     },
     extends: 'airbnb-base',
-    ignorePatterns: ['src/com.simonedenadai.motu-avb.sdPlugin/libs/**/*'],
+    ignorePatterns: ['src/com.simonedenadai.motu-avb.sdPlugin/libs/**/*', 'src/com.simonedenadai.motu-avb.sdPlugin/axios.min.js'],
     overrides: [
         {
             env: {
@@ -26,6 +26,7 @@ module.exports = {
         'no-multiple-empty-lines': ['error', { max: 2 }],
     },
     globals: {
+        axios: true,
         Action: true,
         $SD: true,
         Utils: true,

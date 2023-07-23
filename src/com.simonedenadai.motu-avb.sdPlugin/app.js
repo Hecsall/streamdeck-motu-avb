@@ -15,39 +15,25 @@ const setvalueActions = {};
 
 let globalSettings = {};
 let needsReFetch = true;
-
-
-async function fetchTimeout(url, options = {}) {
-    const { timeout = 1000 } = options;
-
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
-
-    const response = await fetch(url, {
-        ...options,
-        signal: controller.signal,
-    });
-    clearTimeout(id);
-
-    return response;
-}
+let axiosInstance;
 
 
 async function setBooleanActionState(actionsObject) {
     Object.keys(actionsObject).forEach(async (uuid) => {
         const action = actionsObject[uuid];
         if (action.payload.settings.motu_target) {
-            try {
-                const response = await fetchTimeout(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((res) => res.json());
-                if (response.value === 1) {
-                    $SD.setState(uuid, 1);
-                } else {
-                    $SD.setState(uuid, 0);
-                }
-            } catch (error) {
-                console.error('[setBooleanActionState] request failed:', error);
-                $SD.showAlert(uuid);
-            }
+            await axiosInstance.get(`${globalSettings.api_url}/${action.payload.settings.motu_target}`)
+                .then((res) => {
+                    if (res.data.value === 1) {
+                        $SD.setState(uuid, 1);
+                    } else {
+                        $SD.setState(uuid, 0);
+                    }
+                })
+                .catch((error) => {
+                    console.error('[setBooleanActionState] request failed:', error);
+                    $SD.showAlert(uuid);
+                });
         }
     });
 }
@@ -56,35 +42,37 @@ async function setNumericalActionState(actionsObject) {
     Object.keys(actionsObject).forEach(async (uuid) => {
         const action = actionsObject[uuid];
         if (action.payload.settings.motu_target) {
-            try {
-                const response = await fetchTimeout(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((res) => res.json());
-
-                if (response.value === parseFloat(action.payload.settings.on_value)) {
-                    $SD.setState(uuid, 1);
-                } else {
-                    $SD.setState(uuid, 0);
-                }
-            } catch (error) {
-                console.error('[setNumericalActionState] request failed:', error);
-                $SD.showAlert(uuid);
-            }
+            await axiosInstance.get(`${globalSettings.api_url}/${action.payload.settings.motu_target}`)
+                .then((res) => {
+                    if (res.data.value === parseFloat(action.payload.settings.on_value)) {
+                        $SD.setState(uuid, 1);
+                    } else {
+                        $SD.setState(uuid, 0);
+                    }
+                })
+                .catch((error) => {
+                    console.error('[setNumericalActionState] request failed:', error);
+                    $SD.showAlert(uuid);
+                });
         }
     });
 }
 
 
 async function fetchMOTU() {
-    try {
-        const response = await fetchTimeout(globalSettings?.api_url);
-        switch (response.status) {
-        case 200:
-            return response.json();
-        default:
-            return;
-        }
-    } catch (error) {
-        console.error('[fetchMOTU] request failed:', error);
-    }
+    return axiosInstance.get()
+        .then((response) => {
+            switch (response.status) {
+            case 200:
+                return response.data;
+            default:
+                return null;
+            }
+        })
+        .catch((error) => {
+            console.error('[fetchMOTU] request failed:', error);
+            return null;
+        });
 }
 
 
@@ -111,16 +99,18 @@ async function sendToMOTU(endpoint, value) {
         const valueToEncode = { value };
         formdata.append('json', JSON.stringify(valueToEncode));
 
-        try {
-            const response = await fetchTimeout(`${globalSettings?.api_url}/${endpoint}`, {
-                method: 'PATCH',
-                body: formdata,
+        return axiosInstance.patch(
+            `${globalSettings?.api_url}/${endpoint}`,
+            formdata,
+            { headers: { 'Content-Type': 'multipart/form-data' } },
+        )
+            .then((response) => response)
+            .catch((error) => {
+                console.error('[sendToMOTU] request failed:', error);
+                return null;
             });
-            return response;
-        } catch (error) {
-            console.error('[sendToMOTU] request failed:', error);
-        }
     }
+    return null;
 }
 
 
@@ -142,6 +132,14 @@ $SD.onDidReceiveGlobalSettings(async (jsn) => {
         // If API URL is already set, fetch the entire
         // MOTU datastore to get some starting values.
         if (globalSettings.api_url) {
+            // Create the axios instance for all future requests
+            if (!axiosInstance) {
+                axiosInstance = axios.create({
+                    baseURL: globalSettings.api_url,
+                    timeout: 1000,
+                });
+            }
+
             await getOrCreateDatastore();
 
             // Set Toggle actions initial state when receiving a new datastore
@@ -187,7 +185,7 @@ toggleonoffAction.onKeyUp(async ({ context, payload }) => {
     }
 
     const response = await sendToMOTU(motuTarget, value);
-    if (response?.ok) {
+    if (response.status === 204) {
         globalSettings.datastore[motuTarget] = parseInt(value, 10);
         // If used from a MultiAction avoid changing the action state.
         if (!payload.isInMultiAction) {
@@ -220,7 +218,7 @@ togglevaluesAction.onKeyUp(async ({ context, payload }) => {
     }
 
     const response = await sendToMOTU(motuTarget, value);
-    if (response?.ok) {
+    if (response.status === 204) {
         globalSettings.datastore[motuTarget] = parseFloat(value);
         // If used from a MultiAction avoid changing the action state.
         if (!payload.isInMultiAction) {
@@ -246,7 +244,7 @@ setvalueAction.onKeyUp(async ({ context, payload }) => {
     }
 
     const response = await sendToMOTU(motuTarget, setValue);
-    if (response?.ok) {
+    if (response.status === 204) {
         globalSettings.datastore[motuTarget] = parseFloat(setValue);
     } else {
         $SD.showAlert(context);
