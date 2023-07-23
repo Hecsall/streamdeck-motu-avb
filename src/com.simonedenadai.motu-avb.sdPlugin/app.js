@@ -38,7 +38,7 @@ async function setBooleanActionState(actionsObject) {
         const action = actionsObject[uuid];
         if (action.payload.settings.motu_target) {
             try {
-                const response = await fetchTimeout(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
+                const response = await fetchTimeout(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((res) => res.json());
                 if (response.value === 1) {
                     $SD.setState(uuid, 1);
                 } else {
@@ -57,7 +57,7 @@ async function setNumericalActionState(actionsObject) {
         const action = actionsObject[uuid];
         if (action.payload.settings.motu_target) {
             try {
-                const response = await fetchTimeout(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
+                const response = await fetchTimeout(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((res) => res.json());
 
                 if (response.value === parseFloat(action.payload.settings.on_value)) {
                     $SD.setState(uuid, 1);
@@ -129,7 +129,7 @@ async function sendToMOTU(endpoint, value) {
  * { actionInfo, appInfo, connection, messageType, port, uuid }
  */
 $SD.onConnected(({ uuid }) => {
-    // $SD.setGlobalSettings({}); // Used to clean global settings
+    // $SD.setGlobalSettings({}); // Used to clear global settings
     $SD.getGlobalSettings(uuid);
 });
 
