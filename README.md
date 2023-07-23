@@ -1,6 +1,17 @@
 # Stream Deck MOTU AVB Plugin
 
-MOTU AVB Audio Interface Plugin for Stream Deck
+MOTU AVB Audio Interface Plugin for Stream Deck (Unofficial)
+
+## Available Actions
+
+**Toggle On/Off** [ 0 &rarr; 1 &rarr; 0 ] \
+Switches a channel between 0 and 1, useful for Mute, Solo, and other UI elements that can be switched on;
+
+**Toggle Values** [ X &rarr; Y &rarr; X ] \
+Switches a channel between 2 user-defined values, useful if you need to jump between 2 different dB values on faders;
+
+**Set Value** [ &rarr; X ] \
+This will set a channel to a specific value, this is a single press action, not a toggle;
 
 ## Development
 
@@ -39,3 +50,6 @@ MOTU AVB Audio Interface Plugin for Stream Deck
     Add a DWORD `html_remote_debugging_enabled` with value `1` in the registry `@HKEY_CURRENT_USER\Software\Elgato Systems GmbH\StreamDeck`
 
 - Close and reopen the Stream Deck software then open [http://localhost:23654/](http://localhost:23654/) on your browser.
+
+> **Disclaimer**
+    All product and company names are trademarks™ or registered® trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them.
