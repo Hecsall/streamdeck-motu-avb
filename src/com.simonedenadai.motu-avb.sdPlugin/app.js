@@ -12,21 +12,40 @@ const setvalueAction = new Action('com.simonedenadai.motu-avb.setvalue');
 let setvalueActions = {}
 
 
-
 let globalSettings = {};
 let needsReFetch = true;
+
+
+async function fetchTimeout(url, options = {}) {
+    const { timeout = 1000 } = options;
+    
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+  
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal  
+    });
+    clearTimeout(id);
+  
+    return response;
+  }
 
 
 async function setBooleanActionState(actionsObject) {
     Object.keys(actionsObject).forEach(async (uuid) => {
         const action = actionsObject[uuid]
         if (action.payload.settings.motu_target) {
-            const response = await fetch(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
-            
-            if (response.value === 1) {
-                $SD.setState(uuid, 1)
-            } else {
-                $SD.setState(uuid, 0)
+            try {
+                const response = await fetchTimeout(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
+                if (response.value === 1) {
+                    $SD.setState(uuid, 1)
+                } else {
+                    $SD.setState(uuid, 0)
+                }
+            } catch (error) {
+                console.error('[setBooleanActionState] request failed:', error);
+                $SD.showAlert(uuid);
             }
         }
     })
@@ -36,27 +55,35 @@ async function setNumericalActionState(actionsObject) {
     Object.keys(actionsObject).forEach(async (uuid) => {
         const action = actionsObject[uuid]
         if (action.payload.settings.motu_target) {
-            const response = await fetch(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
-            
-            if (response.value === parseFloat(action.payload.settings.on_value)) {
-                $SD.setState(uuid, 1)
-            } else {
-                $SD.setState(uuid, 0)
+            try {
+                const response = await fetchTimeout(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
+                
+                if (response.value === parseFloat(action.payload.settings.on_value)) {
+                    $SD.setState(uuid, 1)
+                } else {
+                    $SD.setState(uuid, 0)
+                }
+            } catch (error) {
+                console.error('[setNumericalActionState] request failed:', error);
+                $SD.showAlert(uuid);
             }
         }
     })
 }
 
 
-function fetchMOTU() {
-    return fetch(globalSettings?.api_url).then((response) => {
+async function fetchMOTU() {
+    try {
+        const response = await fetchTimeout(globalSettings?.api_url)
         switch (response.status) {
             case 200:
                 return response.json();
             default:
-                return null;
+                return;
         }
-    })
+    } catch (error) {
+        console.error('[fetchMOTU] request failed:', error);
+    }
 }
 
 
@@ -77,20 +104,21 @@ async function getOrCreateDatastore(refetch) {
 }
 
 
-function sendToMOTU(endpoint, value) {
-    if (globalSettings?.api_url) {    
+async function sendToMOTU(endpoint, value) {
+    if (globalSettings?.api_url) {
         var formdata = new FormData();
         const valueToEncode = {"value": value}
         formdata.append("json", JSON.stringify(valueToEncode));
 
-        return fetch(`${globalSettings?.api_url}/${endpoint}`, {
-            method: 'PATCH',
-            body: formdata,
-        }).then((response) => {
-            return response
-        }).catch((error) => {
-            console.error(error)
-        });
+        try {
+            const response = await fetchTimeout(`${globalSettings?.api_url}/${endpoint}`, {
+                method: 'PATCH',
+                body: formdata
+            });
+            return response;
+        } catch (error) {
+            console.error('[sendToMOTU] request failed:', error)
+        }
     }
 }
 
@@ -145,7 +173,6 @@ toggleonoffAction.onKeyUp(async ({ action, context, device, event, payload }) =>
     const motu_target = payload?.settings?.motu_target;
     const off_value = payload?.settings?.off_value;
     const on_value = payload?.settings?.on_value;
-
     // Keep going only if the key is correctly configured
     if (!motu_target || !off_value || !on_value) {
         $SD.showAlert(context);
@@ -160,7 +187,8 @@ toggleonoffAction.onKeyUp(async ({ action, context, device, event, payload }) =>
     }
 
     const response = await sendToMOTU(motu_target, value);
-    if (response.ok) {
+    if (response?.ok) {
+        console.log(response);
         globalSettings.datastore[motu_target] = parseInt(value);
         // If used from a MultiAction avoid changing the action state.
         if (!payload.isInMultiAction) {
