@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /// <reference path="../libs/js/property-inspector.js" />
 /// <reference path="../libs/js/utils.js" />
 
@@ -35,7 +36,6 @@ const updateUI = (globalSettings, actionSettings) => {
  * {actionInfo, appInfo, connection, messageType, port, uuid}
  */
 $PI.onConnected((jsn) => {
-    console.log('Properties Inspector onConnected');
     $PI.getGlobalSettings();
 
     const { actionInfo } = jsn;
@@ -68,7 +68,6 @@ $PI.onConnected((jsn) => {
         'input',
         Utils.debounce(150, () => {
             const value = Utils.getFormValue(form);
-            console.log(value);
             $PI.setSettings(value);
         }),
     );
@@ -95,7 +94,7 @@ $PI.onConnected((jsn) => {
         'click',
         Utils.debounce(150, () => {
             if (apiUrl.checkValidity()) {
-                fetch(api_url.value).then((response) => {
+                fetch(apiUrl.value).then((response) => {
                     switch (response.status) {
                     case 200:
                         // If the URL is working we save it and we save the datastore

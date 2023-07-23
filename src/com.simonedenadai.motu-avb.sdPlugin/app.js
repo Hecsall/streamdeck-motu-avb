@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /// <reference path="libs/js/action.js" />
 /// <reference path="libs/js/stream-deck.js" />
 
@@ -128,7 +129,6 @@ async function sendToMOTU(endpoint, value) {
  * { actionInfo, appInfo, connection, messageType, port, uuid }
  */
 $SD.onConnected(({ uuid }) => {
-    console.log('Stream Deck connected!');
     // $SD.setGlobalSettings({}); // Used to clean global settings
     $SD.getGlobalSettings(uuid);
 });
@@ -148,47 +148,33 @@ $SD.onDidReceiveGlobalSettings(async (jsn) => {
             setBooleanActionState(toggleonoffActions);
             setNumericalActionState(togglevaluesActions);
         }
-        console.log('cached global settings', globalSettings);
+        console.log('Global settings', globalSettings);
     } else {
-        console.log('unable to cache global settings; payload.settings field not found');
+        console.log('Unable to cache global settings; payload.settings field not found');
     }
 });
 
 
 // On willAppear, store used actions inside their respective collection for later use
-toggleonoffAction.onWillAppear(async ({
-    action, context, device, event, payload,
-}) => {
-    toggleonoffActions[context] = {
-        action, device, event, payload,
-    };
+toggleonoffAction.onWillAppear(async (jsn) => {
+    toggleonoffActions[jsn.context] = jsn;
 });
 
-togglevaluesAction.onWillAppear(async ({
-    action, context, device, event, payload,
-}) => {
-    togglevaluesActions[context] = {
-        action, device, event, payload,
-    };
+togglevaluesAction.onWillAppear(async (jsn) => {
+    togglevaluesActions[jsn.context] = jsn;
 });
 
-setvalueAction.onWillAppear(async ({
-    action, context, device, event, payload,
-}) => {
-    setvalueActions[context] = {
-        action, device, event, payload,
-    };
+setvalueAction.onWillAppear(async (jsn) => {
+    setvalueActions[jsn.context] = jsn;
 });
 
-
-toggleonoffAction.onKeyUp(async ({
-    action, context, device, event, payload,
-}) => {
-    const motu_target = payload?.settings?.motu_target;
-    const off_value = payload?.settings?.off_value;
-    const on_value = payload?.settings?.on_value;
+// { action, context, device, event, payload }
+toggleonoffAction.onKeyUp(async ({ context, payload }) => {
+    const motuTarget = payload?.settings?.motu_target;
+    const offValue = payload?.settings?.off_value;
+    const onValue = payload?.settings?.on_value;
     // Keep going only if the key is correctly configured
-    if (!motu_target || !off_value || !on_value) {
+    if (!motuTarget || !offValue || !onValue) {
         $SD.showAlert(context);
         return;
     }
@@ -200,10 +186,9 @@ toggleonoffAction.onKeyUp(async ({
         value = 1;
     }
 
-    const response = await sendToMOTU(motu_target, value);
+    const response = await sendToMOTU(motuTarget, value);
     if (response?.ok) {
-        console.log(response);
-        globalSettings.datastore[motu_target] = parseInt(value, 10);
+        globalSettings.datastore[motuTarget] = parseInt(value, 10);
         // If used from a MultiAction avoid changing the action state.
         if (!payload.isInMultiAction) {
             $SD.setState(
@@ -216,29 +201,27 @@ toggleonoffAction.onKeyUp(async ({
     }
 });
 
-togglevaluesAction.onKeyUp(async ({
-    action, context, device, event, payload,
-}) => {
-    const motu_target = payload?.settings?.motu_target;
-    const off_value = payload?.settings?.off_value;
-    const on_value = payload?.settings?.on_value;
+togglevaluesAction.onKeyUp(async ({ context, payload }) => {
+    const motuTarget = payload?.settings?.motu_target;
+    const offValue = payload?.settings?.off_value;
+    const onValue = payload?.settings?.on_value;
 
     // Keep going only if the key is correctly configured
-    if (!motu_target || !off_value || !on_value) {
+    if (!motuTarget || !offValue || !onValue) {
         $SD.showAlert(context);
         return;
     }
 
-    let value = off_value;
+    let value = offValue;
     let newState = 0;
     if (payload.state === 0) {
         newState = 1;
-        value = on_value;
+        value = onValue;
     }
 
-    const response = await sendToMOTU(motu_target, value);
+    const response = await sendToMOTU(motuTarget, value);
     if (response?.ok) {
-        globalSettings.datastore[motu_target] = parseFloat(value);
+        globalSettings.datastore[motuTarget] = parseFloat(value);
         // If used from a MultiAction avoid changing the action state.
         if (!payload.isInMultiAction) {
             $SD.setState(
@@ -252,21 +235,19 @@ togglevaluesAction.onKeyUp(async ({
 });
 
 
-setvalueAction.onKeyUp(async ({
-    action, context, device, event, payload,
-}) => {
-    const motu_target = payload?.settings?.motu_target;
-    const set_value = payload?.settings?.set_value;
+setvalueAction.onKeyUp(async ({ context, payload }) => {
+    const motuTarget = payload?.settings?.motu_target;
+    const setValue = payload?.settings?.set_value;
 
     // Keep going only if the key is correctly configured
-    if (!motu_target || !set_value) {
+    if (!motuTarget || !setValue) {
         $SD.showAlert(context);
         return;
     }
 
-    const response = await sendToMOTU(motu_target, set_value);
+    const response = await sendToMOTU(motuTarget, setValue);
     if (response?.ok) {
-        globalSettings.datastore[motu_target] = parseFloat(set_value);
+        globalSettings.datastore[motuTarget] = parseFloat(setValue);
     } else {
         $SD.showAlert(context);
     }
