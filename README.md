@@ -25,6 +25,8 @@ MOTU AVB Audio Interface Plugin for Stream Deck
     mklink /D C:\Users\%USERNAME%\AppData\Roaming\Elgato\StreamDeck\Plugins\com.simonedenadai.motu-avb.sdPlugin %cd%\src\com.simonedenadai.motu-avb.sdPlugin
     ```
 
+- (Optional) Run `npm install` to install eslint for code style and formatting
+
 - Enable Stream Deck Debugging mode
 
     **macOS**
