@@ -221,7 +221,7 @@ togglevaluesAction.onKeyUp(async ({ action, context, device, event, payload }) =
     }
 
     const response = await sendToMOTU(motu_target, value);
-    if (response.ok) {
+    if (response?.ok) {
         globalSettings.datastore[motu_target] = parseFloat(value);
         // If used from a MultiAction avoid changing the action state.
         if (!payload.isInMultiAction) {
@@ -247,7 +247,7 @@ setvalueAction.onKeyUp(async ({ action, context, device, event, payload }) => {
     }
 
     const response = await sendToMOTU(motu_target, set_value);
-    if (response.ok) {
+    if (response?.ok) {
         globalSettings.datastore[motu_target] = parseFloat(set_value);
     } else {
         $SD.showAlert(context);
