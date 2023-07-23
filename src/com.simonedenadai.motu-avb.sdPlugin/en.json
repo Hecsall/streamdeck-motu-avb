@@ -8,6 +8,9 @@
     "Channel": "Channel",
     "Connect": "Connect",
     "Configuration": "Configuration",
-    "-- Select --": "-- Select --"
+    "-- Select --": "-- Select --",
+    "Value OFF": "Value OFF",
+    "Value ON": "Value ON",
+    "Value to set": "Value to set"
   }
 }

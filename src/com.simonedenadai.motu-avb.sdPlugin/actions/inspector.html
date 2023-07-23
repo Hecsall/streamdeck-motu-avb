@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <title>com.simonedenadai.motu-avb Property Inspector</title>
+    <link rel="stylesheet" href="../libs/css/sdpi.css" />
+    <link rel="stylesheet" href="../custom.css" />
+</head>
+
+<body>
+    <div class="sdpi-wrapper">
+    
+        <!-- API SETTINGS -->
+        <div class="sdpi-heading">API Connection</div>
+
+        <div class="sdpi-item" title="Enter your MOTU AVB datastore URL">
+            <div class="sdpi-item-label" title="API URL">API URL</div>
+            <input
+                class="sdpi-item-value"
+                id="api_url"
+                value=""
+                placeholder="http://localhost:1280/aaaaa11111/datastore"
+                required=""
+                pattern="https?:\/\/(?:w{1,3}\.)?[^\s.]+(?:\.[a-z]+)*(?::\d+)?(?![^<]*(?:<\/\w+>|\/?>))"
+            >
+        </div>
+
+        <div class="sdpi-item" id="button_no_label">
+            <div class="sdpi-item-label empty"></div>
+            <button class="sdpi-item-value" id="api_save_button" data-localize>Connect</button>
+        </div>
+
+
+        <!-- ACTION SETTINGS -->
+        <div class="sdpi-heading" data-localize>Configuration</div>
+
+        <form id="configuration"> 
+            <div class="sdpi-item" type="select">
+                <div data-localize class="sdpi-item-label" title="Channel">Channel</div>
+                <select class="sdpi-item-value" name="motu_target" id="motu_target">
+                    <option disabled selected value data-localize="">-- Select --</option>
+                </select>
+            </div>
+
+            <!-- The section below is shown when the current action is the togglevalues action --> 
+            <!-- OFF Value -->
+            <div class="sdpi-item hide" id="off-input-item">   
+                <div class="sdpi-item-label" data-localize>Value OFF</div>
+                <input class="sdpi-item-value" id="off_value" inputmode="decimal" pattern="^\d*\.?\d+$" type="decimal" name="off_value" required="" value="0">
+            </div>
+            
+            <!-- ON Value -->
+            <div class="sdpi-item hide" id="on-input-item">   
+                <div class="sdpi-item-label" data-localize>Value ON</div>
+                <input class="sdpi-item-value" id="on_value" inputmode="decimal" pattern="^\d*\.?\d+$" type="decimal" name="on_value" required="" value="1">
+            </div>
+            
+
+            <!-- The section below is shown when the current action is the setvalue action --> 
+            <!-- Set Value -->
+            <div class="sdpi-item hide" id="set-input-item">   
+                <div class="sdpi-item-label" data-localize>Value to set</div>
+                <input class="sdpi-item-value" id="set_value" inputmode="decimal" pattern="^\d*\.?\d+$" type="decimal" name="set_value" required="" value="1">
+            </div>
+
+
+            <!-- The section below is shown when the current action is either the togglevalues or the setvalue action --> 
+            <details class="hide" id="values-help-item">
+                <summary>Need help finding values?</summary>
+                <p>This plugin uses the raw values that MOTU API uses behind the scenes, not the decibel (dB) values!</p>
+
+                <h3>How to find values</h3>
+                <p>
+                    Finding "MOTU values" is pretty simple.<br>
+                    Open your MOTU Webapp and make a change to whatever you want to control, for example a Fader, now set it to the value you actually want to discover.
+                </p>
+                <p>
+                    Now open the datastore (<mark>http://localhost:1280/abcde12345/datastore</mark>) and scroll all the way to the bottom.
+                </p>
+                <p>
+                    The last value you changed on the web interface should be right there at the bottom 👇
+                </p>
+            </details>
+
+        </form>
+    </div>
+
+    <div class="sdpi-info-label hidden" style="top: -1000" value=""></div>
+
+    <!-- Stream Deck Libs -->
+    <script src="../libs/js/constants.js"></script>
+    <script src="../libs/js/prototypes.js"></script>
+    <script src="../libs/js/timers.js"></script>
+    <script src="../libs/js/utils.js"></script>
+    <script src="../libs/js/events.js"></script>
+    <script src="../libs/js/api.js"></script>
+    <script src="../libs/js/property-inspector.js"></script>
+    <script src="../libs/js/dynamic-styles.js"></script>
+    
+    <!-- Property Inspector Source -->
+    <script src="inspector.js"></script>
+</body>
+
+</html>

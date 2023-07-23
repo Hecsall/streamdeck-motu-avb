@@ -4,7 +4,7 @@
 	"CodePath": "app.html",
 	"Description": "Remote control for MOTU AVB Audio Interfaces",
 	"Name": "MOTU AVB",
-	"Icon": "actions/mute/assets/action",
+	"Icon": "assets/icons/pluginIcon",
 	"URL": "https://github.com/Hecsall/streamdeck-motu-avb",
 	"Version": "1.0.0",
 	"Software": {
@@ -21,79 +21,57 @@
 		}
 	],
 	"Category": "MOTU AVB",
-	"CategoryIcon": "actions/mute/assets/actionimage",
+	"CategoryIcon": "images/category/categoryIcon",
 	"Actions": [
 		{
-			"Icon": "actions/mute/assets/actionimage",
-			"Name": "Toggle Mute",
+			"Icon": "images/actions/toggle",
+			"Name": "Toggle On/Off",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/mute/assets/action",
-					"Name": "Mute"
+					"Image": "images/icons/toggleOn",
+					"Name": "Toggle On"
 				},
 				{
-					"Image": "actions/mute/assets/action",
-					"Name": "Unmute"
+					"Image": "images/icons/toggleOff",
+					"Name": "Toggle Off"
 				}
 			],
-			"Tooltip": "Mute/Unmute a channel",
-			"UUID": "com.simonedenadai.motu-avb.mute",
-			"PropertyInspectorPath": "actions/mute/property-inspector/inspector.html"
+			"Tooltip": "Toggle On/Off a channel",
+			"UUID": "com.simonedenadai.motu-avb.toggleonoff",
+			"PropertyInspectorPath": "actions/inspector.html"
 		},
 		{
-			"Icon": "actions/solo/assets/actionimage",
-			"Name": "Toggle Solo",
+			"Icon": "images/actions/toggle",
+			"Name": "Toggle Values",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/solo/assets/action",
-					"Name": "Solo"
+					"Image": "images/icons/toggleOn",
+					"Name": "Toggle On"
 				},
 				{
-					"Image": "actions/solo/assets/action",
-					"Name": "Disable Solo"
+					"Image": "images/icons/toggleOff",
+					"Name": "Toggle Off"
 				}
 			],
-			"Tooltip": "Enable/Disable Solo on a channel",
-			"UUID": "com.simonedenadai.motu-avb.solo",
-			"PropertyInspectorPath": "actions/solo/property-inspector/inspector.html"
+			"Tooltip": "Toggle between 2 values in a channel",
+			"UUID": "com.simonedenadai.motu-avb.togglevalues",
+			"PropertyInspectorPath": "actions/inspector.html"
 		},
 		{
-			"Icon": "actions/reverb/assets/actionimage",
-			"Name": "Toggle Reverb",
+			"Icon": "images/actions/setValue",
+			"Name": "Set Value",
 			"Controllers": ["Keypad"],
 			"States": [
 				{
-					"Image": "actions/reverb/assets/action",
-					"Name": "Enable Reverb"
-				},
-				{
-					"Image": "actions/reverb/assets/action",
-					"Name": "Disable Reverb"
+					"Image": "images/icons/setValue",
+					"Name": "Set value"
 				}
 			],
-			"Tooltip": "Enable/Disable Reverb",
-			"UUID": "com.simonedenadai.motu-avb.reverb",
-			"PropertyInspectorPath": "actions/reverb/property-inspector/inspector.html"
-		},
-		{
-			"Icon": "actions/generic_bool/assets/actionimage",
-			"Name": "Toggle Generic Value",
-			"Controllers": ["Keypad"],
-			"States": [
-				{
-					"Image": "actions/generic_bool/assets/action",
-					"Name": "Enable"
-				},
-				{
-					"Image": "actions/generic_bool/assets/action",
-					"Name": "Disable"
-				}
-			],
-			"Tooltip": "Enable/Disable a generic channel (switches between 0 and 1)",
-			"UUID": "com.simonedenadai.motu-avb.generic_bool",
-			"PropertyInspectorPath": "actions/generic_bool/property-inspector/inspector.html"
+			"Tooltip": "Sets a value in a channel",
+			"UUID": "com.simonedenadai.motu-avb.setvalue",
+			"PropertyInspectorPath": "actions/inspector.html"
 		}
 	]
 }

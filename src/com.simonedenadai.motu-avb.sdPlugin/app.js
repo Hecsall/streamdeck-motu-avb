@@ -1,17 +1,16 @@
 /// <reference path="libs/js/action.js" />
 /// <reference path="libs/js/stream-deck.js" />
 
-const muteAction = new Action('com.simonedenadai.motu-avb.mute');
-let muteActions = {}
 
-const soloAction = new Action('com.simonedenadai.motu-avb.solo');
-let soloActions = {}
+const toggleonoffAction = new Action('com.simonedenadai.motu-avb.toggleonoff');
+let toggleonoffActions = {}
 
-const reverbAction = new Action('com.simonedenadai.motu-avb.reverb');
-let reverbActions = {}
+const togglevaluesAction = new Action('com.simonedenadai.motu-avb.togglevalues');
+let togglevaluesActions = {}
 
-const generic_boolAction = new Action('com.simonedenadai.motu-avb.generic_bool');
-let generic_boolActions = {}
+const setvalueAction = new Action('com.simonedenadai.motu-avb.setvalue');
+let setvalueActions = {}
+
 
 
 let globalSettings = {};
@@ -21,39 +20,32 @@ let needsReFetch = true;
 async function setBooleanActionState(actionsObject) {
     Object.keys(actionsObject).forEach(async (uuid) => {
         const action = actionsObject[uuid]
-        const response = await fetch(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
-        
-        if (response.value === 1) {
-            $SD.setState(uuid, 1)
-        } else {
-            $SD.setState(uuid, 0)
+        if (action.payload.settings.motu_target) {
+            const response = await fetch(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
+            
+            if (response.value === 1) {
+                $SD.setState(uuid, 1)
+            } else {
+                $SD.setState(uuid, 0)
+            }
         }
     })
 }
 
-// async function subscribeMotu() {
-//     let response = await fetch("/subscribe");
-  
-//     if (response.status == 502) {
-//         // Status 502 is a connection timeout error,
-//         // may happen when the connection was pending for too long,
-//         // and the remote server or a proxy closed it
-//         // let's reconnect
-//         await subscribeMotu();
-//     } else if (response.status != 200) {
-//         // An error - let's show it
-//         showMessage(response.statusText);
-//         // Reconnect in one second
-//         await new Promise(resolve => setTimeout(resolve, 1000));
-//         await subscribeMotu();
-//     } else {
-//         // Get and show the message
-//         let message = await response.text();
-//         showMessage(message);
-//         // Call subscribeMotu() again to get the next message
-//         await subscribeMotu();
-//     }
-// }
+async function setNumericalActionState(actionsObject) {
+    Object.keys(actionsObject).forEach(async (uuid) => {
+        const action = actionsObject[uuid]
+        if (action.payload.settings.motu_target) {
+            const response = await fetch(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
+            
+            if (response.value === parseFloat(action.payload.settings.on_value)) {
+                $SD.setState(uuid, 1)
+            } else {
+                $SD.setState(uuid, 0)
+            }
+        }
+    })
+}
 
 
 function fetchMOTU() {
@@ -123,17 +115,9 @@ $SD.onDidReceiveGlobalSettings(async (jsn) => {
         if (globalSettings.api_url) {
             await getOrCreateDatastore(needsReFetch);
             
-            // XXX: Add here new Boolean actions
-            // Update state for Boolean actions (value 0 or 1)
-            [muteActions, soloActions, reverbActions, generic_boolActions].forEach(async (actions) => {
-                await setBooleanActionState(actions);
-            })
-            
-            // XXX: Add here new Numerical actions
-            // Update state for Numerical actions
-            // [].forEach(async (actions) => {
-            //     await setNumericalActionState(actions);
-            // })
+            // Set Toggle actions initial state when receiving a new datastore
+            setBooleanActionState(toggleonoffActions);
+            setNumericalActionState(togglevaluesActions);
         }
         console.log('cached global settings', globalSettings);
     }
@@ -144,64 +128,100 @@ $SD.onDidReceiveGlobalSettings(async (jsn) => {
 
 
 // On willAppear, store used actions inside their respective collection for later use
-muteAction.onWillAppear(async ({ action, context, device, event, payload }) => {
-    muteActions[context] = { action, device, event, payload };
+toggleonoffAction.onWillAppear(async ({ action, context, device, event, payload }) => {
+    toggleonoffActions[context] = { action, device, event, payload };
 });
 
-soloAction.onWillAppear(async ({ action, context, device, event, payload }) => {
-    soloActions[context] = { action, device, event, payload };
+togglevaluesAction.onWillAppear(async ({ action, context, device, event, payload }) => {
+    togglevaluesActions[context] = { action, device, event, payload };
 });
 
-reverbAction.onWillAppear(async ({ action, context, device, event, payload }) => {
-    reverbActions[context] = { action, device, event, payload };
-});
-
-generic_boolAction.onWillAppear(async ({ action, context, device, event, payload }) => {
-    generic_boolActions[context] = { action, device, event, payload };
+setvalueAction.onWillAppear(async ({ action, context, device, event, payload }) => {
+    setvalueActions[context] = { action, device, event, payload };
 });
 
 
-// XXX: Add here all "Boolean" actions to be handled the same way
-[
-    muteAction,
-    soloAction,
-    reverbAction,
-    generic_boolAction
-].forEach((action) => {
-    action.onKeyUp(async ({ action, context, device, event, payload }) => {
-        const motu_target = payload?.settings?.motu_target;
-        // Keep going only if the key is correctly configured
-        if (!motu_target) {
-            $SD.showAlert(context)
-            return
+toggleonoffAction.onKeyUp(async ({ action, context, device, event, payload }) => {
+    const motu_target = payload?.settings?.motu_target;
+    const off_value = payload?.settings?.off_value;
+    const on_value = payload?.settings?.on_value;
+
+    // Keep going only if the key is correctly configured
+    if (!motu_target || !off_value || !on_value) {
+        $SD.showAlert(context);
+        return
+    }
+
+    let value = 0;
+    let newState = 0;
+    if (payload.state === 0) {
+        newState = 1;
+        value = 1;
+    }
+
+    const response = await sendToMOTU(motu_target, value);
+    if (response.ok) {
+        globalSettings.datastore[motu_target] = parseInt(value);
+        // If used from a MultiAction avoid changing the action state.
+        if (!payload.isInMultiAction) {
+            $SD.setState(
+                context, 
+                newState
+            );
         }
-    
-        // const datastore = await getOrCreateDatastore();
-        // const currentStatus = datastore[motu_target]
-        // const value = currentStatus == 1 ? 0 : 1;
-    
-        let value;
-        let newState;
-        if (payload.state === 0) {
-            newState = 1
-            value = 1
-        } else {
-            newState = 0
-            value = 0
+    } else {
+        $SD.showAlert(context);
+    }
+});
+
+togglevaluesAction.onKeyUp(async ({ action, context, device, event, payload }) => {
+    const motu_target = payload?.settings?.motu_target;
+    const off_value = payload?.settings?.off_value;
+    const on_value = payload?.settings?.on_value;
+
+    // Keep going only if the key is correctly configured
+    if (!motu_target || !off_value || !on_value) {
+        $SD.showAlert(context);
+        return
+    }
+
+    let value = off_value;
+    let newState = 0;
+    if (payload.state === 0) {
+        newState = 1;
+        value = on_value;
+    }
+
+    const response = await sendToMOTU(motu_target, value);
+    if (response.ok) {
+        globalSettings.datastore[motu_target] = parseFloat(value);
+        // If used from a MultiAction avoid changing the action state.
+        if (!payload.isInMultiAction) {
+            $SD.setState(
+                context, 
+                newState
+            );
         }
-    
-        const response = await sendToMOTU(motu_target, value)
-        if (response.ok) {
-            globalSettings.datastore[motu_target] = parseInt(value)
-            // If used from a MultiAction avoid changing the action state.
-            if (!payload.isInMultiAction) {
-                $SD.setState(
-                    context, 
-                    newState
-                )
-            }
-        } else {
-            $SD.showAlert(context)
-        }
-    });
+    } else {
+        $SD.showAlert(context);
+    }
+});
+
+
+setvalueAction.onKeyUp(async ({ action, context, device, event, payload }) => {
+    const motu_target = payload?.settings?.motu_target;
+    const set_value = payload?.settings?.set_value;
+
+    // Keep going only if the key is correctly configured
+    if (!motu_target || !set_value) {
+        $SD.showAlert(context);
+        return
+    }
+
+    const response = await sendToMOTU(motu_target, set_value);
+    if (response.ok) {
+        globalSettings.datastore[motu_target] = parseFloat(set_value);
+    } else {
+        $SD.showAlert(context);
+    }
 });

@@ -1,7 +1,11 @@
 
-input:invalid {
-    border: solid 1px red;
-    box-sizing: border-box;
+.hide {
+    display: none;
+}
+
+input#api_url {
+    padding-right: 16px;
+    min-width: calc(219px - 16px);
 }
 
 input.validated {
