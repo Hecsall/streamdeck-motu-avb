@@ -18,27 +18,7 @@ let needsReFetch = true;
 let axiosInstance;
 
 
-async function setBooleanActionState(actionsObject) {
-    Object.keys(actionsObject).forEach(async (uuid) => {
-        const action = actionsObject[uuid];
-        if (action.payload.settings.motu_target) {
-            await axiosInstance.get(`${globalSettings.api_url}/${action.payload.settings.motu_target}`)
-                .then((res) => {
-                    if (res.data.value === 1) {
-                        $SD.setState(uuid, 1);
-                    } else {
-                        $SD.setState(uuid, 0);
-                    }
-                })
-                .catch((error) => {
-                    console.error('[setBooleanActionState] request failed:', error);
-                    $SD.showAlert(uuid);
-                });
-        }
-    });
-}
-
-async function setNumericalActionState(actionsObject) {
+async function updateActionState(actionsObject) {
     Object.keys(actionsObject).forEach(async (uuid) => {
         const action = actionsObject[uuid];
         if (action.payload.settings.motu_target) {
@@ -51,7 +31,7 @@ async function setNumericalActionState(actionsObject) {
                     }
                 })
                 .catch((error) => {
-                    console.error('[setNumericalActionState] request failed:', error);
+                    console.error('[updateActionState] request failed:', error);
                     $SD.showAlert(uuid);
                 });
         }
@@ -61,35 +41,11 @@ async function setNumericalActionState(actionsObject) {
 
 async function fetchMOTU() {
     return axiosInstance.get()
-        .then((response) => {
-            switch (response.status) {
-            case 200:
-                return response.data;
-            default:
-                return null;
-            }
-        })
+        .then((response) => response.data)
         .catch((error) => {
             console.error('[fetchMOTU] request failed:', error);
             return null;
         });
-}
-
-
-async function getOrCreateDatastore() {
-    if (needsReFetch || !globalSettings.datastore) {
-        const datastore = await fetchMOTU();
-        if (datastore) {
-            const newGlobalSettings = {
-                ...globalSettings,
-                datastore,
-            };
-            $SD.setGlobalSettings(newGlobalSettings);
-            globalSettings = newGlobalSettings;
-            needsReFetch = false;
-        }
-    }
-    return globalSettings?.datastore;
 }
 
 
@@ -111,6 +67,23 @@ async function sendToMOTU(endpoint, value) {
             });
     }
     return null;
+}
+
+
+async function getOrCreateDatastore() {
+    if (needsReFetch || !globalSettings.datastore) {
+        const datastore = await fetchMOTU();
+        if (datastore) {
+            const newGlobalSettings = {
+                ...globalSettings,
+                datastore,
+            };
+            $SD.setGlobalSettings(newGlobalSettings);
+            globalSettings = newGlobalSettings;
+            needsReFetch = false;
+        }
+    }
+    return globalSettings?.datastore;
 }
 
 
@@ -142,9 +115,9 @@ $SD.onDidReceiveGlobalSettings(async (jsn) => {
 
             await getOrCreateDatastore();
 
-            // Set Toggle actions initial state when receiving a new datastore
-            setBooleanActionState(toggleonoffActions);
-            setNumericalActionState(togglevaluesActions);
+            // Set actions initial state when receiving a new datastore
+            updateActionState(toggleonoffActions);
+            updateActionState(togglevaluesActions);
         }
         console.log('Global settings', globalSettings);
     } else {
