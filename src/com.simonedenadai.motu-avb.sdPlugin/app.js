@@ -3,13 +3,13 @@
 
 
 const toggleonoffAction = new Action('com.simonedenadai.motu-avb.toggleonoff');
-let toggleonoffActions = {}
+const toggleonoffActions = {};
 
 const togglevaluesAction = new Action('com.simonedenadai.motu-avb.togglevalues');
-let togglevaluesActions = {}
+const togglevaluesActions = {};
 
 const setvalueAction = new Action('com.simonedenadai.motu-avb.setvalue');
-let setvalueActions = {}
+const setvalueActions = {};
 
 
 let globalSettings = {};
@@ -18,68 +18,68 @@ let needsReFetch = true;
 
 async function fetchTimeout(url, options = {}) {
     const { timeout = 1000 } = options;
-    
+
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
-  
+
     const response = await fetch(url, {
-      ...options,
-      signal: controller.signal  
+        ...options,
+        signal: controller.signal,
     });
     clearTimeout(id);
-  
+
     return response;
-  }
+}
 
 
 async function setBooleanActionState(actionsObject) {
     Object.keys(actionsObject).forEach(async (uuid) => {
-        const action = actionsObject[uuid]
+        const action = actionsObject[uuid];
         if (action.payload.settings.motu_target) {
             try {
                 const response = await fetchTimeout(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
                 if (response.value === 1) {
-                    $SD.setState(uuid, 1)
+                    $SD.setState(uuid, 1);
                 } else {
-                    $SD.setState(uuid, 0)
+                    $SD.setState(uuid, 0);
                 }
             } catch (error) {
                 console.error('[setBooleanActionState] request failed:', error);
                 $SD.showAlert(uuid);
             }
         }
-    })
+    });
 }
 
 async function setNumericalActionState(actionsObject) {
     Object.keys(actionsObject).forEach(async (uuid) => {
-        const action = actionsObject[uuid]
+        const action = actionsObject[uuid];
         if (action.payload.settings.motu_target) {
             try {
                 const response = await fetchTimeout(`${globalSettings.api_url}/${action.payload.settings.motu_target}`).then((response) => response.json());
-                
+
                 if (response.value === parseFloat(action.payload.settings.on_value)) {
-                    $SD.setState(uuid, 1)
+                    $SD.setState(uuid, 1);
                 } else {
-                    $SD.setState(uuid, 0)
+                    $SD.setState(uuid, 0);
                 }
             } catch (error) {
                 console.error('[setNumericalActionState] request failed:', error);
                 $SD.showAlert(uuid);
             }
         }
-    })
+    });
 }
 
 
 async function fetchMOTU() {
     try {
-        const response = await fetchTimeout(globalSettings?.api_url)
+        const response = await fetchTimeout(globalSettings?.api_url);
         switch (response.status) {
-            case 200:
-                return response.json();
-            default:
-                return;
+        case 200:
+            return response.json();
+        default:
+            return;
         }
     } catch (error) {
         console.error('[fetchMOTU] request failed:', error);
@@ -87,37 +87,37 @@ async function fetchMOTU() {
 }
 
 
-async function getOrCreateDatastore(refetch) {
+async function getOrCreateDatastore() {
     if (needsReFetch || !globalSettings.datastore) {
-        const datastore = await fetchMOTU()
+        const datastore = await fetchMOTU();
         if (datastore) {
             const newGlobalSettings = {
                 ...globalSettings,
-                datastore: datastore
-            }
+                datastore,
+            };
             $SD.setGlobalSettings(newGlobalSettings);
             globalSettings = newGlobalSettings;
             needsReFetch = false;
         }
     }
-    return globalSettings?.datastore
+    return globalSettings?.datastore;
 }
 
 
 async function sendToMOTU(endpoint, value) {
     if (globalSettings?.api_url) {
-        var formdata = new FormData();
-        const valueToEncode = {"value": value}
-        formdata.append("json", JSON.stringify(valueToEncode));
+        const formdata = new FormData();
+        const valueToEncode = { value };
+        formdata.append('json', JSON.stringify(valueToEncode));
 
         try {
             const response = await fetchTimeout(`${globalSettings?.api_url}/${endpoint}`, {
                 method: 'PATCH',
-                body: formdata
+                body: formdata,
             });
             return response;
         } catch (error) {
-            console.error('[sendToMOTU] request failed:', error)
+            console.error('[sendToMOTU] request failed:', error);
         }
     }
 }
@@ -125,58 +125,72 @@ async function sendToMOTU(endpoint, value) {
 
 /**
  * The first event fired when Stream Deck starts
+ * { actionInfo, appInfo, connection, messageType, port, uuid }
  */
-$SD.onConnected(({ actionInfo, appInfo, connection, messageType, port, uuid }) => {
-	console.log('Stream Deck connected!');
+$SD.onConnected(({ uuid }) => {
+    console.log('Stream Deck connected!');
     // $SD.setGlobalSettings({}); // Used to clean global settings
-	$SD.getGlobalSettings(uuid);
+    $SD.getGlobalSettings(uuid);
 });
 
 
 $SD.onDidReceiveGlobalSettings(async (jsn) => {
-    let receivedGlobalSettings = jsn?.payload?.settings;
+    const receivedGlobalSettings = jsn?.payload?.settings;
     if (receivedGlobalSettings) {
         globalSettings = receivedGlobalSettings;
 
         // If API URL is already set, fetch the entire
         // MOTU datastore to get some starting values.
         if (globalSettings.api_url) {
-            await getOrCreateDatastore(needsReFetch);
-            
+            await getOrCreateDatastore();
+
             // Set Toggle actions initial state when receiving a new datastore
             setBooleanActionState(toggleonoffActions);
             setNumericalActionState(togglevaluesActions);
         }
         console.log('cached global settings', globalSettings);
-    }
-    else {
+    } else {
         console.log('unable to cache global settings; payload.settings field not found');
     }
-})
+});
 
 
 // On willAppear, store used actions inside their respective collection for later use
-toggleonoffAction.onWillAppear(async ({ action, context, device, event, payload }) => {
-    toggleonoffActions[context] = { action, device, event, payload };
+toggleonoffAction.onWillAppear(async ({
+    action, context, device, event, payload,
+}) => {
+    toggleonoffActions[context] = {
+        action, device, event, payload,
+    };
 });
 
-togglevaluesAction.onWillAppear(async ({ action, context, device, event, payload }) => {
-    togglevaluesActions[context] = { action, device, event, payload };
+togglevaluesAction.onWillAppear(async ({
+    action, context, device, event, payload,
+}) => {
+    togglevaluesActions[context] = {
+        action, device, event, payload,
+    };
 });
 
-setvalueAction.onWillAppear(async ({ action, context, device, event, payload }) => {
-    setvalueActions[context] = { action, device, event, payload };
+setvalueAction.onWillAppear(async ({
+    action, context, device, event, payload,
+}) => {
+    setvalueActions[context] = {
+        action, device, event, payload,
+    };
 });
 
 
-toggleonoffAction.onKeyUp(async ({ action, context, device, event, payload }) => {
+toggleonoffAction.onKeyUp(async ({
+    action, context, device, event, payload,
+}) => {
     const motu_target = payload?.settings?.motu_target;
     const off_value = payload?.settings?.off_value;
     const on_value = payload?.settings?.on_value;
     // Keep going only if the key is correctly configured
     if (!motu_target || !off_value || !on_value) {
         $SD.showAlert(context);
-        return
+        return;
     }
 
     let value = 0;
@@ -189,12 +203,12 @@ toggleonoffAction.onKeyUp(async ({ action, context, device, event, payload }) =>
     const response = await sendToMOTU(motu_target, value);
     if (response?.ok) {
         console.log(response);
-        globalSettings.datastore[motu_target] = parseInt(value);
+        globalSettings.datastore[motu_target] = parseInt(value, 10);
         // If used from a MultiAction avoid changing the action state.
         if (!payload.isInMultiAction) {
             $SD.setState(
-                context, 
-                newState
+                context,
+                newState,
             );
         }
     } else {
@@ -202,7 +216,9 @@ toggleonoffAction.onKeyUp(async ({ action, context, device, event, payload }) =>
     }
 });
 
-togglevaluesAction.onKeyUp(async ({ action, context, device, event, payload }) => {
+togglevaluesAction.onKeyUp(async ({
+    action, context, device, event, payload,
+}) => {
     const motu_target = payload?.settings?.motu_target;
     const off_value = payload?.settings?.off_value;
     const on_value = payload?.settings?.on_value;
@@ -210,7 +226,7 @@ togglevaluesAction.onKeyUp(async ({ action, context, device, event, payload }) =
     // Keep going only if the key is correctly configured
     if (!motu_target || !off_value || !on_value) {
         $SD.showAlert(context);
-        return
+        return;
     }
 
     let value = off_value;
@@ -226,8 +242,8 @@ togglevaluesAction.onKeyUp(async ({ action, context, device, event, payload }) =
         // If used from a MultiAction avoid changing the action state.
         if (!payload.isInMultiAction) {
             $SD.setState(
-                context, 
-                newState
+                context,
+                newState,
             );
         }
     } else {
@@ -236,14 +252,16 @@ togglevaluesAction.onKeyUp(async ({ action, context, device, event, payload }) =
 });
 
 
-setvalueAction.onKeyUp(async ({ action, context, device, event, payload }) => {
+setvalueAction.onKeyUp(async ({
+    action, context, device, event, payload,
+}) => {
     const motu_target = payload?.settings?.motu_target;
     const set_value = payload?.settings?.set_value;
 
     // Keep going only if the key is correctly configured
     if (!motu_target || !set_value) {
         $SD.showAlert(context);
-        return
+        return;
     }
 
     const response = await sendToMOTU(motu_target, set_value);

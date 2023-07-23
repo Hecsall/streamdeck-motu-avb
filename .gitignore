@@ -8,3 +8,4 @@ package.json
 __exclude
 .editorconfig
 .DS_Store
+node_modules
