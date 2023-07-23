@@ -1,0 +1,14 @@
+
+.hide {
+    display: none;
+}
+
+input#api_url {
+    padding-right: 16px;
+    min-width: calc(219px - 16px);
+}
+
+input.validated {
+    border: solid 1px green;
+    box-sizing: border-box;
+}
