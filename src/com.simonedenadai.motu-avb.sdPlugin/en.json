@@ -1,8 +1,16 @@
 {
   "Description": "Remote control for MOTU AVB Audio Interfaces",
-  "com.simonedenadai.motu-avb.mute": {
-    "Name": "Toggle Mute", 
-    "Tooltip": "Mute/Unmute a channel"
+  "com.simonedenadai.motu-avb.toggleonoff": {
+    "Name": "Toggle On/Off", 
+    "Tooltip": "Toggle On/Off a channel"
+  },
+  "com.simonedenadai.motu-avb.togglevalues": {
+    "Name": "Toggle Values", 
+    "Tooltip": "Toggle between 2 values in a channel"
+  },
+  "com.simonedenadai.motu-avb.setvalue": {
+    "Name": "Set Value", 
+    "Tooltip": "Sets a value in a channel"
   },
   "Localization": {
     "Channel": "Channel",
