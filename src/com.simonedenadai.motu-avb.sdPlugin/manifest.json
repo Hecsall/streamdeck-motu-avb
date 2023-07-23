@@ -4,7 +4,7 @@
 	"CodePath": "app.html",
 	"Description": "Remote control for MOTU AVB Audio Interfaces",
 	"Name": "MOTU AVB",
-	"Icon": "assets/icons/pluginIcon",
+	"Icon": "images/icons/pluginIcon",
 	"URL": "https://github.com/Hecsall/streamdeck-motu-avb",
 	"Version": "1.0.0",
 	"Software": {
