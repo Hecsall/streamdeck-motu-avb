@@ -72,14 +72,17 @@ $PI.onConnected((jsn) => {
         }),
     );
 
+    const BOOLEAN_CHANNELS = ["send", "enable", "mute", "solo", "makeup"]
+    const ALL_CHANNELS = [...BOOLEAN_CHANNELS, "fader", "ratio", "threshold", "trim", "release", "attack"]
+
     // piApiSettings will use this to regex to select
     // which MOTU channels to display inside the UI
     if (actionInfo.action === 'com.simonedenadai.motu-avb.toggleonoff') {
         // For boolean options MOTU accepts only 0 or 1
-        window.selectableRegex = /^mix\/(.*)\/(.*)\/(.*)\/(send|enable|mute|solo)$/;
+        window.selectableRegex = new RegExp(`^mix\/(.*)\/(.*)\/(.*)\/(${BOOLEAN_CHANNELS.join('|')})$`);
     } else {
         // TODO: check if there are other values to be included in the regex
-        window.selectableRegex = /^mix\/(.*)\/(.*)\/(.*)\/(send|fader)$/;
+        window.selectableRegex = new RegExp(`^mix\/(.*)\/(.*)\/(.*)\/(${ALL_CHANNELS.join('|')})$`);
     }
 
 
