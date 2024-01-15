@@ -18,6 +18,32 @@ const updateUI = (globalSettings, actionSettings) => {
             }
             selectElement.appendChild(option);
         });
+
+        const listElement = document.querySelector('#motu_targets');
+        possibleChannels.sort().forEach((element) => {
+            const item = document.createElement('li');
+            item.innerText = element;
+            if (actionSettings.motu_target && actionSettings.motu_target === element) {
+                item.classList.add('selected');
+            }
+            listElement.appendChild(item);
+        });
+
+        const onItemClick = (item) => {
+            allItems.forEach((item) => {
+                item.classList.remove('selected');
+            });
+            item.classList.add('selected');
+            selectElement.value = item.innerText;
+            const form = document.querySelector('#configuration');
+            form.dispatchEvent(new Event('input', { bubbles: true }));
+
+        }
+
+        const allItems = document.querySelectorAll('#motu_targets li');
+        allItems.forEach((item) => {
+            item.addEventListener('click', () => onItemClick(item));
+        });
     }
 
     Object.keys(globalSettings).forEach((key) => {
@@ -67,6 +93,7 @@ $PI.onConnected((jsn) => {
     form.addEventListener(
         'input',
         Utils.debounce(150, () => {
+            console.log('inspector form input detected')
             const value = Utils.getFormValue(form);
             $PI.setSettings(value);
         }),
@@ -100,23 +127,23 @@ $PI.onConnected((jsn) => {
                 axios.get(apiUrl.value, { timeout: 1000 })
                     .then((response) => {
                         switch (response.status) {
-                        case 200:
-                            // If the URL is working we save it and we save the datastore
-                            $PI.setGlobalSettings({
-                                [apiUrl.id]: apiUrl.value,
-                                datastore: response.data,
-                                datastoreUpdatedAt: new Date(),
-                            });
-                            apiUrl.classList.add('validated');
-                            break;
-                        default:
-                            // If the URL is not working we show an alert and remove
-                            // the old saved api_url
-                            $PI.setGlobalSettings({
-                                [apiUrl.id]: null,
-                            });
-                            apiUrl.classList.remove('validated');
-                            alert(`The URL is not working, a quick check returned a status ${response.status}`);
+                            case 200:
+                                // If the URL is working we save it and we save the datastore
+                                $PI.setGlobalSettings({
+                                    [apiUrl.id]: apiUrl.value,
+                                    datastore: response.data,
+                                    datastoreUpdatedAt: new Date(),
+                                });
+                                apiUrl.classList.add('validated');
+                                break;
+                            default:
+                                // If the URL is not working we show an alert and remove
+                                // the old saved api_url
+                                $PI.setGlobalSettings({
+                                    [apiUrl.id]: null,
+                                });
+                                apiUrl.classList.remove('validated');
+                                alert(`The URL is not working, a quick check returned a status ${response.status}`);
                         }
                     });
 
@@ -128,6 +155,35 @@ $PI.onConnected((jsn) => {
             }
         }),
     );
+
+    const searchTargetInput = document.querySelector('#search_motu_targets');
+    const motuTargetsList = document.querySelector('#motu_targets');
+
+    // Handle search input
+    searchTargetInput.addEventListener('keyup', () => {
+        const searchTerm = searchTargetInput.value.toUpperCase();
+        const li = motuTargetsList.getElementsByTagName('li');
+
+        if (searchTerm === "") {
+            for (let i = 0; i < li.length; i++) {
+                li[i].style.display = "";
+            }
+            return;
+        }
+
+        // TODO: refactor loop as a forEach
+        for (let i = 0; i < li.length; i++) {
+            item = li[i];
+            const txtValue = item.innerText;
+            if (txtValue.toUpperCase().indexOf(searchTerm) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    })
+
+
 
     // When receiving global settings, update the UI with those values
     $PI.onDidReceiveGlobalSettings((data) => {
