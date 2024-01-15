@@ -29,6 +29,12 @@ const updateUI = (globalSettings, actionSettings) => {
             listElement.appendChild(item);
         });
 
+        // Center the selected item on UI refresh to make it visible
+        document.querySelector('#motu_targets li.selected')?.scrollIntoView({
+            behavior: 'instant', 
+            block: 'center'
+        });
+
         const onItemClick = (item) => {
             allItems.forEach((item) => {
                 item.classList.remove('selected');
@@ -37,9 +43,9 @@ const updateUI = (globalSettings, actionSettings) => {
             selectElement.value = item.innerText;
             const form = document.querySelector('#configuration');
             form.dispatchEvent(new Event('input', { bubbles: true }));
-
         }
 
+        // Attach onClick event to all items to make them selectable
         const allItems = document.querySelectorAll('#motu_targets li');
         allItems.forEach((item) => {
             item.addEventListener('click', () => onItemClick(item));

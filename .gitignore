@@ -9,3 +9,5 @@ __exclude
 .editorconfig
 .DS_Store
 node_modules
+*.streamDeckPlugin
+*.exe
