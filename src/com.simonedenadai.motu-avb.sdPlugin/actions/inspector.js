@@ -105,8 +105,33 @@ $PI.onConnected((jsn) => {
         }),
     );
 
-    const BOOLEAN_CHANNELS = ["send", "enable", "mute", "solo", "makeup"]
-    const ALL_CHANNELS = [...BOOLEAN_CHANNELS, "fader", "ratio", "threshold", "trim", "release", "attack"]
+    const BOOLEAN_CHANNELS = ["send", "enable", "mute", "solo", "mode", "limit"]
+
+    const ALL_CHANNELS = [
+        ...BOOLEAN_CHANNELS,
+        "fader",
+        "ratio",
+        "threshold",
+        "trim",
+        "release",
+        "attack",
+        "freq",
+        "gain",
+        "bw",
+        "makeup",
+        "peak",
+        "pan",
+        "reduction",
+        "reverbtime",
+        "mod",
+        "tailspread",
+        "predelay",
+        "hf",
+        "mfratio",
+        "mf",
+        "hfratio",
+        "avail"
+    ]
 
     // piApiSettings will use this to regex to select
     // which MOTU channels to display inside the UI
@@ -114,7 +139,6 @@ $PI.onConnected((jsn) => {
         // For boolean options MOTU accepts only 0 or 1
         window.selectableRegex = new RegExp(`^mix\/(.*)\/(.*)\/(.*)\/(${BOOLEAN_CHANNELS.join('|')})$`);
     } else {
-        // TODO: check if there are other values to be included in the regex
         window.selectableRegex = new RegExp(`^mix\/(.*)\/(.*)\/(.*)\/(${ALL_CHANNELS.join('|')})$`);
     }
 
@@ -168,25 +192,23 @@ $PI.onConnected((jsn) => {
     // Handle search input
     searchTargetInput.addEventListener('keyup', () => {
         const searchTerm = searchTargetInput.value.toUpperCase();
-        const li = motuTargetsList.getElementsByTagName('li');
+        const li = motuTargetsList.querySelectorAll('li');
 
         if (searchTerm === "") {
-            for (let i = 0; i < li.length; i++) {
-                li[i].style.display = "";
-            }
+            li.forEach((element) => {
+                element.style.display = "";
+            })
             return;
         }
 
-        // TODO: refactor loop as a forEach
-        for (let i = 0; i < li.length; i++) {
-            item = li[i];
-            const txtValue = item.innerText;
+        li.forEach((element) => {
+            const txtValue = element.innerText;
             if (txtValue.toUpperCase().indexOf(searchTerm) > -1) {
-                li[i].style.display = "";
+                element.style.display = "";
             } else {
-                li[i].style.display = "none";
+                element.style.display = "none";
             }
-        }
+        })
     })
 
 
