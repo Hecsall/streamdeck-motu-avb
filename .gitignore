@@ -3,7 +3,6 @@
 /src/DistributionTool
 com.elgato.template.streamDeckPlugin
 .vscode/**
-package.json
 .history
 __exclude
 .editorconfig

@@ -1,3 +1,0 @@
-[submodule "src/com.simonedenadai.motu-avb.sdPlugin/libs"]
-	path = src/com.simonedenadai.motu-avb.sdPlugin/libs
-	url = https://github.com/elgatosf/streamdeck-javascript-sdk

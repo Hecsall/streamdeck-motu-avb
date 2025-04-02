@@ -2,6 +2,8 @@
 
 MOTU AVB Audio Interface Plugin for Stream Deck (Unofficial)
 
+![MOTU AVB StreamDeck Plugin](preview.png)
+
 ## Available Actions
 
 **Toggle On/Off** [ 0 &rarr; 1 &rarr; 0 ] \
@@ -15,10 +17,10 @@ This will set a channel to a specific value, this is a single press action, not 
 
 ## Development
 
-- Clone this repo using the --recurse-submodules flag
+- Clone this repo
 
     ```sh
-    git clone --recurse-submodules https://github.com/Hecsall/streamdeck-motu-avb.git
+    git clone https://github.com/Hecsall/streamdeck-motu-avb.git
     ```
 
 - From the project root folder, create a symlink to Stream Deck Plugins folder.
