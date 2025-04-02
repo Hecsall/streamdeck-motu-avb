@@ -18,6 +18,38 @@ const updateUI = (globalSettings, actionSettings) => {
             }
             selectElement.appendChild(option);
         });
+
+        const listElement = document.querySelector('#motu_targets');
+        possibleChannels.sort().forEach((element) => {
+            const item = document.createElement('li');
+            item.innerText = element;
+            if (actionSettings.motu_target && actionSettings.motu_target === element) {
+                item.classList.add('selected');
+            }
+            listElement.appendChild(item);
+        });
+
+        // Center the selected item on UI refresh to make it visible
+        document.querySelector('#motu_targets li.selected')?.scrollIntoView({
+            behavior: 'instant', 
+            block: 'center'
+        });
+
+        const onItemClick = (item) => {
+            allItems.forEach((item) => {
+                item.classList.remove('selected');
+            });
+            item.classList.add('selected');
+            selectElement.value = item.innerText;
+            const form = document.querySelector('#configuration');
+            form.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        // Attach onClick event to all items to make them selectable
+        const allItems = document.querySelectorAll('#motu_targets li');
+        allItems.forEach((item) => {
+            item.addEventListener('click', () => onItemClick(item));
+        });
     }
 
     Object.keys(globalSettings).forEach((key) => {
@@ -67,19 +99,47 @@ $PI.onConnected((jsn) => {
     form.addEventListener(
         'input',
         Utils.debounce(150, () => {
+            console.log('inspector form input detected')
             const value = Utils.getFormValue(form);
             $PI.setSettings(value);
         }),
     );
 
+    const BOOLEAN_CHANNELS = ["send", "enable", "mute", "solo", "mode", "limit"]
+
+    const ALL_CHANNELS = [
+        ...BOOLEAN_CHANNELS,
+        "fader",
+        "ratio",
+        "threshold",
+        "trim",
+        "release",
+        "attack",
+        "freq",
+        "gain",
+        "bw",
+        "makeup",
+        "peak",
+        "pan",
+        "reduction",
+        "reverbtime",
+        "mod",
+        "tailspread",
+        "predelay",
+        "hf",
+        "mfratio",
+        "mf",
+        "hfratio",
+        "avail"
+    ]
+
     // piApiSettings will use this to regex to select
     // which MOTU channels to display inside the UI
     if (actionInfo.action === 'com.simonedenadai.motu-avb.toggleonoff') {
         // For boolean options MOTU accepts only 0 or 1
-        window.selectableRegex = /^mix\/(.*)\/(.*)\/(.*)\/(send|enable|mute|solo)$/;
+        window.selectableRegex = new RegExp(`^mix\/(.*)\/(.*)\/(.*)\/(${BOOLEAN_CHANNELS.join('|')})$`);
     } else {
-        // TODO: check if there are other values to be included in the regex
-        window.selectableRegex = /^mix\/(.*)\/(.*)\/(.*)\/(send|fader)$/;
+        window.selectableRegex = new RegExp(`^mix\/(.*)\/(.*)\/(.*)\/(${ALL_CHANNELS.join('|')})$`);
     }
 
 
@@ -97,23 +157,23 @@ $PI.onConnected((jsn) => {
                 axios.get(apiUrl.value, { timeout: 1000 })
                     .then((response) => {
                         switch (response.status) {
-                        case 200:
-                            // If the URL is working we save it and we save the datastore
-                            $PI.setGlobalSettings({
-                                [apiUrl.id]: apiUrl.value,
-                                datastore: response.data,
-                                datastoreUpdatedAt: new Date(),
-                            });
-                            apiUrl.classList.add('validated');
-                            break;
-                        default:
-                            // If the URL is not working we show an alert and remove
-                            // the old saved api_url
-                            $PI.setGlobalSettings({
-                                [apiUrl.id]: null,
-                            });
-                            apiUrl.classList.remove('validated');
-                            alert(`The URL is not working, a quick check returned a status ${response.status}`);
+                            case 200:
+                                // If the URL is working we save it and we save the datastore
+                                $PI.setGlobalSettings({
+                                    [apiUrl.id]: apiUrl.value,
+                                    datastore: response.data,
+                                    datastoreUpdatedAt: new Date(),
+                                });
+                                apiUrl.classList.add('validated');
+                                break;
+                            default:
+                                // If the URL is not working we show an alert and remove
+                                // the old saved api_url
+                                $PI.setGlobalSettings({
+                                    [apiUrl.id]: null,
+                                });
+                                apiUrl.classList.remove('validated');
+                                alert(`The URL is not working, a quick check returned a status ${response.status}`);
                         }
                     });
 
@@ -125,6 +185,33 @@ $PI.onConnected((jsn) => {
             }
         }),
     );
+
+    const searchTargetInput = document.querySelector('#search_motu_targets');
+    const motuTargetsList = document.querySelector('#motu_targets');
+
+    // Handle search input
+    searchTargetInput.addEventListener('keyup', () => {
+        const searchTerm = searchTargetInput.value.toUpperCase();
+        const li = motuTargetsList.querySelectorAll('li');
+
+        if (searchTerm === "") {
+            li.forEach((element) => {
+                element.style.display = "";
+            })
+            return;
+        }
+
+        li.forEach((element) => {
+            const txtValue = element.innerText;
+            if (txtValue.toUpperCase().indexOf(searchTerm) > -1) {
+                element.style.display = "";
+            } else {
+                element.style.display = "none";
+            }
+        })
+    })
+
+
 
     // When receiving global settings, update the UI with those values
     $PI.onDidReceiveGlobalSettings((data) => {

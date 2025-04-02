@@ -6,7 +6,7 @@
 	"Name": "MOTU AVB",
 	"Icon": "images/icons/pluginIcon",
 	"URL": "https://github.com/Hecsall/streamdeck-motu-avb",
-	"Version": "1.0.0",
+	"Version": "1.1.0",
 	"Software": {
 		"MinimumVersion": "5.0"
 	},

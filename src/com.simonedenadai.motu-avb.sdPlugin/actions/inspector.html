@@ -41,8 +41,18 @@
         <div class="sdpi-heading" data-localize>Configuration</div>
 
         <form id="configuration"> 
-            <div class="sdpi-item" type="select">
+            <!-- Search (filter motu targets) -->
+            <div class="sdpi-item">
+                <div class="sdpi-item-label empty"></div>
+                <input class="sdpi-item-value" id="search_motu_targets" value="" placeholder="Search">
+            </div>
+            <!-- List of possible motu targets -->
+            <div type="list" class="sdpi-item list">
                 <div data-localize class="sdpi-item-label" title="Channel">Channel</div>
+                <ul class="sdpi-item-value single-select text-left" name="motu_targets" id="motu_targets"></ul>
+            </div>
+            <!-- Hidden, but populated by motu_targets above-->
+            <div class="sdpi-item hide" type="select">
                 <select class="sdpi-item-value" name="motu_target" id="motu_target">
                     <option disabled selected value data-localize="">-- Select --</option>
                 </select>
