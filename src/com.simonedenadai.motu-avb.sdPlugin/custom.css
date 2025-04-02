@@ -3,6 +3,10 @@
     display: none;
 }
 
+.text-left {
+    text-align: start;
+}
+
 input#api_url {
     padding-right: 16px;
     min-width: calc(219px - 16px);
