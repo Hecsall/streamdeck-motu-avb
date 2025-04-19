@@ -1,12 +1,6 @@
-.DS_Store
-.idea/**
-/src/DistributionTool
-com.elgato.template.streamDeckPlugin
-.vscode/**
-.history
-__exclude
-.editorconfig
-.DS_Store
-node_modules
-*.streamDeckPlugin
-*.exe
+# Node.js
+node_modules/
+
+# Stream Deck files
+*.sdPlugin/bin
+*.sdPlugin/logs

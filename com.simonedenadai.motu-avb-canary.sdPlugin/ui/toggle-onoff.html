@@ -1,0 +1,62 @@
+<!-- Stream Deck Property Inspector for Toggle ON/OFF action using sdpi-select -->
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Toggle ON/OFF Property Inspector</title>
+    <script src="https://sdpi-components.dev/releases/v4/sdpi-components.js"></script>
+</head>
+<body>
+
+    <!-- <sdpi-item label="Increment By">
+        <sdpi-range setting="incrementBy" min="1" max="5" step="1" default="1" showlabels></sdpi-range>
+    </sdpi-item> -->
+
+    <sdpi-item label="MOTU URL">
+        <sdpi-textfield setting="motuUrl" global="true" placeholder="http://localhost:1280/abc123/datastore"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="Endpoint">
+        <sdpi-select setting="endpoint" datasource="getEndpoints" loading="Fetching endpoints..." hot-reload placeholder="Please choose an endpoint"></sdpi-select>
+    </sdpi-item>
+   
+    <script>
+        const { streamDeckClient } = SDPIComponents;
+
+        // streamDeckClient.getSettings().then(settings => console.log(settings));
+
+        // streamDeckClient.setSettings({
+        //     name: "John Doe",
+        //     showName: true,
+        //     favColor: "green",
+        // });
+
+        // Stream Deck Property Inspector API
+        // const sdpi = window.streamDeck || {};
+        // function setEndpoints(endpoints, selected) {
+        //     const sel = document.getElementById('endpoint');
+        //     sel.innerHTML = '';
+        //     endpoints.forEach(ep => {
+        //         const opt = document.createElement('option');
+        //         opt.value = ep;
+        //         opt.textContent = ep;
+        //         if (ep === selected) opt.selected = true;
+        //         sel.appendChild(opt);
+        //     });
+        // }
+        // window.addEventListener('message', ev => {
+        //     if (ev.data && ev.data.endpoints) {
+        //         setEndpoints(ev.data.endpoints, ev.data.selected);
+        //     }
+        // });
+        // document.getElementById('endpoint').addEventListener('change', e => {
+        //     const value = e.target.value;
+        //     sdpi.setSettings && sdpi.setSettings({ endpoint: value });
+        // });
+        // window.onload = () => {
+        //     if (sdpi.sendToPlugin) {
+        //         sdpi.sendToPlugin({ request: 'listEndpoints' });
+        //     }
+        // };
+    </script>
+</body>
+</html>
