@@ -4,15 +4,31 @@
     <meta charset="utf-8" />
     <title>Toggle ON/OFF Property Inspector</title>
     <script src="https://sdpi-components.dev/releases/v4/sdpi-components.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <!-- <sdpi-item label="Increment By">
         <sdpi-range setting="incrementBy" min="1" max="5" step="1" default="1" showlabels></sdpi-range>
     </sdpi-item> -->
 
-    <sdpi-item label="MOTU URL">
-        <sdpi-textfield setting="motuUrl" global="true" placeholder="http://localhost:1280/abc123/datastore"></sdpi-textfield>
+    
+    <sdpi-item>
+        <h3>API Connection</h3>
+    </sdpi-item>
+
+    <sdpi-item label="API URL" title="Enter your MOTU AVB Datastore API URL">
+        <sdpi-textfield 
+            setting="motuUrl"
+            global="true"
+            placeholder="http://localhost:1280/abc123/datastore"
+            pattern="https?:\/\/(?:w{1,3}\.)?[^\s.]+(?:\.[a-z]+)*(?::\d+)?(?![^<]*(?:<\/\w+>|\/?>))"
+            required
+        ></sdpi-textfield>
+    </sdpi-item>
+
+
+    <sdpi-item>
+        <h3>Configuration</h3>
     </sdpi-item>
 
     <sdpi-item label="Endpoint">
