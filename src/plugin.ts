@@ -6,6 +6,8 @@ import { MotuApi } from "./motu-avb-api";
 // We can enable "trace" logging so that all messages between the Stream Deck, and the plugin are recorded. When storing sensitive information
 streamDeck.logger.setLevel(LogLevel.TRACE);
 
+// Singleton instance of the MotuApi utlity class
+const motuApi = MotuApi.getInstance();
 
 // Register the increment action.
 streamDeck.actions.registerAction(new ToggleOnOff());
@@ -15,35 +17,33 @@ streamDeck.actions.registerAction(new ToggleOnOff());
 
 // Listen for global settings changes and update MotuApi
 streamDeck.settings.onDidReceiveGlobalSettings(async (ev) => {
-    streamDeck.logger.trace(`["plugin.ts"] Start receive global settings`, ev);
+    streamDeck.logger.trace(`["plugin.ts"] Receive global settings`, ev);
     
     const globalSettings = ev.settings as JsonObject;
     
     if (globalSettings.motuUrl) {
-        const motuApi = MotuApi.getInstance();
+    //     const motuApi = MotuApi.getInstance();
         const motuUrl = globalSettings.motuUrl as string;
 
         let datastoreUpdate = null;
 
-        // Update MotuApi URL if changed. 
-        // If url is valid, fetch and return the datastore
+        // Update MotuApi URL if changed, then fetch and return the datastore
         if (motuUrl !== motuApi.getUrl()) {
             datastoreUpdate = await motuApi.setUrl(motuUrl);
         }
 
         // Save the updated datastore in global settings
-        if (datastoreUpdate || !globalSettings.datastore) {
-            const datastore = datastoreUpdate as JsonObject
-            const newGlobalSettings = { ...globalSettings, datastore };
+        if (datastoreUpdate) { // || !globalSettings.datastore
+            const newGlobalSettings = {...globalSettings, datastore: datastoreUpdate} as JsonObject;
             streamDeck.settings.setGlobalSettings(newGlobalSettings);
+            
+            streamDeck.actions.forEach(async (action) => {
+                // Calling getSettings() will trigger the action didReceiveSettings handle
+                // that will update its state
+                await action.getSettings()
+            });
         }
 
-        // Update all currently visible action states
-        streamDeck.actions.forEach(async (action) => {
-            // Calling getSettings() will trigger the action didReceiveSettings handles
-            // that will update its state
-            await action.getSettings()
-        });
 
         streamDeck.logger.trace(`["plugin.ts"] End receive global settings`);
     }

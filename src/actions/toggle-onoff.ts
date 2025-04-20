@@ -2,31 +2,35 @@ import streamDeck, { action, KeyDownEvent, SingletonAction, WillAppearEvent, Pro
 import { MotuApi } from "../motu-avb-api";
 
 /**
- * Action to toggle an ON/OFF endpoint (0/1) on the MOTU AVB device.
+ * Settings for ToggleOnOff action.
+ */
+type ToggleOnOffSettings = {
+    endpoint?: string;
+};
+
+
+/**
+ * Action to toggle an ON/OFF endpoint (1/0) on the MOTU AVB device.
  */
 @action({ UUID: "com.simonedenadai.motu-avb-canary.toggleonoff" })
 export class ToggleOnOff extends SingletonAction<ToggleOnOffSettings> {
-    private motu = MotuApi.getInstance();
+    private motuApi = MotuApi.getInstance();
 
     // When property inspector is opened in the Stream Deck app
-    // override async onPropertyInspectorDidAppear(ev: PropertyInspectorDidAppearEvent): Promise<void> {
-    //     const globalSettings = streamDeck.settings.getGlobalSettings();
-    //     const datastore = await this.motu.fetchDatastore();
-    //     const endpoints = Object.keys(datastore);
-    // }
+    // override async onPropertyInspectorDidAppear(ev: PropertyInspectorDidAppearEvent): Promise<void> { }
 
     private updateActionState = async (ev: any) => {
         // Fetch current value from datastore
-        const datastore = await this.motu.getDatastore();
+        const globalSettings = await streamDeck.settings.getGlobalSettings();
+        const datastore = globalSettings.datastore as JsonObject || {};
         const endpoint = ev.payload.settings.endpoint;
+        const onValue = 1;
 
         if (datastore && endpoint) {
             const currentValue = datastore[endpoint];
 
-            streamDeck.logger.trace(`["action"] Receive settings`, currentValue);
-
             if (ev.action.isKey()){
-                await ev.action.setState(currentValue === 1 ? 1 : 0);
+                await ev.action.setState(currentValue === onValue ? 1 : 0);
             }
         }
     }
@@ -40,7 +44,7 @@ export class ToggleOnOff extends SingletonAction<ToggleOnOffSettings> {
     
     // onWillAppear runs when the action is rendered on the current StreamDeck page, (also when switching pages)
     // Beware, this runs BEFORE the plugin.ts onDidReceiveGlobalSettings event!
-    override async onWillAppear(ev: WillAppearEvent<ToggleOnOffSettings>): Promise<void> {
+    // override async onWillAppear(ev: WillAppearEvent<ToggleOnOffSettings>): Promise<void> {
         // {
         //  "type":"willAppear",
         //  "action":{
@@ -53,59 +57,57 @@ export class ToggleOnOff extends SingletonAction<ToggleOnOffSettings> {
         //          "state":0
         //      }
         // }
-        streamDeck.logger.trace(`["action"] willAppear`, ev, ev.payload.settings.endpoint);
-        
-        const endpoint = ev.payload.settings.endpoint;
 
-        if (!endpoint) {
-            ev.action.showAlert();
-            return;
-        }
-
-        this.updateActionState(ev)
-    }
+        // streamDeck.logger.trace(`["action"] willAppear`, ev, ev.payload.settings.endpoint);
+    // }
 
     override async onKeyDown(ev: KeyDownEvent<ToggleOnOffSettings>): Promise<void> {
-        streamDeck.logger.trace(`["action"] Key pressed!`);
+        streamDeck.logger.trace(`["action"] Key pressed!`, ev);
         const endpoint = ev.payload.settings.endpoint;
-        
+        const onValue = 1;
+        const offValue = 0;
+
         if (!endpoint) {
             ev.action.showAlert();
             return
         };
 
         // Get current value
-        const datastore = await this.motu.getDatastore();
+        // TODO: Maybe I can avoid this reading from globalSettings
+        // and base my decision on the current state of the action
+        const globalSettings = await streamDeck.settings.getGlobalSettings();
+        const datastore = globalSettings.datastore as JsonObject || {};
+        
+        if (!datastore) {
+            ev.action.showAlert();
+            return;
+        }
+        
         const current = datastore[endpoint];
-        const next = current === 1 ? 0 : 1;
+        const next = current === onValue ? offValue : onValue;
         
         // Patch new value
-        await this.motu.patch(endpoint, next);
+        await this.motuApi.patch(endpoint, next);
         
         // StreamDeck SDK automatically switches state when you press the key
-        // await ev.action.setState(next === 1 ? 1 : 0);
+        // no need to set it manually.
     }
 
     // onSendToPlugin is called when property inspector calls the plugin to get data using the datasource attribute
     override async onSendToPlugin(ev: SendToPluginEvent<JsonValue, ToggleOnOffSettings>): Promise<void> {
-        streamDeck.logger.trace(`["action"] Send to plugin`, ev);
-        const {action, event, context} = ev.payload as JsonObject;
+        const {event} = ev.payload as JsonObject;
+
+        const globalSettings = await streamDeck.settings.getGlobalSettings();
+        const datastore = globalSettings.datastore as JsonObject || {};
 
         if (event === "getEndpoints") {
-            const datastore = await this.motu.getDatastore();
-            const endpoints = Object.keys(datastore);
-        
+            // Filter for boolean-only endpoints
+            const endpoints = Object.keys(datastore).filter((endpoint) => this.motuApi.booleanRegex.test(endpoint));
+            
             await streamDeck.ui.current?.sendToPropertyInspector({
-                event: "getEndpoints", 
+                event, 
                 items: endpoints.map((endpoint) => ({label: endpoint, value: endpoint})),
             });
         }
     }
 }
-
-/**
- * Settings for ToggleOnOff action.
- */
-type ToggleOnOffSettings = {
-    endpoint?: string;
-};
