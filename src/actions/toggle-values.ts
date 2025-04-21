@@ -2,7 +2,7 @@ import streamDeck, { action, KeyDownEvent, SingletonAction, WillAppearEvent, Pro
 import { MotuApi } from "../motu-avb-api";
 
 /**
- * Settings for ToggleOnOff action.
+ * Settings for ToggleValues action.
  */
 type ToggleValuesSettings = {
     endpoint?: string;
@@ -39,8 +39,6 @@ export class ToggleValues extends SingletonAction<ToggleValuesSettings> {
   
     // onDidReceiveSettings runs when you EDIT a setting, or when you call action.getSettings()
     override async onDidReceiveSettings(ev: DidReceiveSettingsEvent<ToggleValuesSettings>): Promise<void> {
-        streamDeck.logger.trace(`["action"] Receive settings`, ev);
-
         this.updateActionState(ev);
     }
     
@@ -59,13 +57,9 @@ export class ToggleValues extends SingletonAction<ToggleValuesSettings> {
         //          "state":0
         //      }
         // }
-
-        // streamDeck.logger.trace(`["action"] willAppear`, ev, ev.payload.settings.endpoint);
     // }
 
-    override async onKeyDown(ev: KeyDownEvent<ToggleValuesSettings>): Promise<void> {
-        streamDeck.logger.trace(`["action"] Key pressed!`, ev);
-        
+    override async onKeyDown(ev: KeyDownEvent<ToggleValuesSettings>): Promise<void> {        
         const {endpoint, onValue, offValue} = ev.payload.settings;
 
         if (!endpoint || !offValue || !onValue) {
@@ -105,7 +99,7 @@ export class ToggleValues extends SingletonAction<ToggleValuesSettings> {
         const datastore = globalSettings.datastore as JsonObject || {};
 
         if (event === "getEndpoints") {
-            // Filter for boolean-only endpoints
+            // Filter for boolean and float endpoints
             const endpoints = Object.keys(datastore).filter((endpoint) => this.motuApi.allRegex.test(endpoint));
             
             await streamDeck.ui.current?.sendToPropertyInspector({

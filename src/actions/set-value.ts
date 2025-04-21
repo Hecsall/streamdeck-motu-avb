@@ -2,7 +2,7 @@ import streamDeck, { action, KeyDownEvent, SingletonAction, WillAppearEvent, Pro
 import { MotuApi } from "../motu-avb-api";
 
 /**
- * Settings for ToggleOnOff action.
+ * Settings for SetValue action.
  */
 type SetValueSettings = {
     endpoint?: string;
@@ -21,9 +21,7 @@ export class SetValue extends SingletonAction<SetValueSettings> {
     // override async onPropertyInspectorDidAppear(ev: PropertyInspectorDidAppearEvent): Promise<void> { }
   
     // onDidReceiveSettings runs when you EDIT a setting, or when you call action.getSettings()
-    override async onDidReceiveSettings(ev: DidReceiveSettingsEvent<SetValueSettings>): Promise<void> {
-        streamDeck.logger.trace(`["action"] Receive settings`, ev);
-    }
+    // override async onDidReceiveSettings(ev: DidReceiveSettingsEvent<SetValueSettings>): Promise<void> {}
     
     // onWillAppear runs when the action is rendered on the current StreamDeck page, (also when switching pages)
     // Beware, this runs BEFORE the plugin.ts onDidReceiveGlobalSettings event!
@@ -40,13 +38,9 @@ export class SetValue extends SingletonAction<SetValueSettings> {
         //          "state":0
         //      }
         // }
-
-        // streamDeck.logger.trace(`["action"] willAppear`, ev, ev.payload.settings.endpoint);
     // }
 
-    override async onKeyDown(ev: KeyDownEvent<SetValueSettings>): Promise<void> {
-        streamDeck.logger.trace(`["action"] Key pressed!`, ev);
-        
+    override async onKeyDown(ev: KeyDownEvent<SetValueSettings>): Promise<void> {        
         const {endpoint, value} = ev.payload.settings;
 
         if (!endpoint || !value) {
@@ -71,7 +65,7 @@ export class SetValue extends SingletonAction<SetValueSettings> {
         const datastore = globalSettings.datastore as JsonObject || {};
 
         if (event === "getEndpoints") {
-            // Filter for boolean-only endpoints
+            // Filter for boolean and float endpoints
             const endpoints = Object.keys(datastore).filter((endpoint) => this.motuApi.allRegex.test(endpoint));
             
             await streamDeck.ui.current?.sendToPropertyInspector({

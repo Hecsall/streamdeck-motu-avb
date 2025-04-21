@@ -37,8 +37,6 @@ export class ToggleOnOff extends SingletonAction<ToggleOnOffSettings> {
   
     // onDidReceiveSettings runs when you EDIT a setting, or when you call action.getSettings()
     override async onDidReceiveSettings(ev: DidReceiveSettingsEvent<ToggleOnOffSettings>): Promise<void> {
-        streamDeck.logger.trace(`["action"] Receive settings`, ev);
-
         this.updateActionState(ev);
     }
     
@@ -57,12 +55,9 @@ export class ToggleOnOff extends SingletonAction<ToggleOnOffSettings> {
         //          "state":0
         //      }
         // }
-
-        // streamDeck.logger.trace(`["action"] willAppear`, ev, ev.payload.settings.endpoint);
     // }
 
     override async onKeyDown(ev: KeyDownEvent<ToggleOnOffSettings>): Promise<void> {
-        streamDeck.logger.trace(`["action"] Key pressed!`, ev);
         const endpoint = ev.payload.settings.endpoint;
         const onValue = 1;
         const offValue = 0;

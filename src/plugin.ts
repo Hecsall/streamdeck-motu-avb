@@ -18,13 +18,10 @@ streamDeck.actions.registerAction(new SetValue());
 
 
 // Listen for global settings changes and update MotuApi
-streamDeck.settings.onDidReceiveGlobalSettings(async (ev) => {
-    streamDeck.logger.trace(`["plugin.ts"] Receive global settings`, ev);
-    
+streamDeck.settings.onDidReceiveGlobalSettings(async (ev) => {   
     const globalSettings = ev.settings as JsonObject;
     
     if (globalSettings.motuUrl) {
-    //     const motuApi = MotuApi.getInstance();
         const motuUrl = globalSettings.motuUrl as string;
 
         let datastoreUpdate = null;
@@ -35,7 +32,7 @@ streamDeck.settings.onDidReceiveGlobalSettings(async (ev) => {
         }
 
         // Save the updated datastore in global settings
-        if (datastoreUpdate) { // || !globalSettings.datastore
+        if (datastoreUpdate) {
             const newGlobalSettings = {...globalSettings, datastore: datastoreUpdate} as JsonObject;
             streamDeck.settings.setGlobalSettings(newGlobalSettings);
             
@@ -45,9 +42,6 @@ streamDeck.settings.onDidReceiveGlobalSettings(async (ev) => {
                 await action.getSettings()
             });
         }
-
-
-        streamDeck.logger.trace(`["plugin.ts"] End receive global settings`);
     }
 });
 
@@ -57,9 +51,7 @@ streamDeck.settings.getGlobalSettings();
 
 
 // When System wakes up from sleep/inactivity
-streamDeck.system.onSystemDidWakeUp((ev) => {
-    streamDeck.logger.trace(`["plugin.ts"] System woke up...`);
-});
+// streamDeck.system.onSystemDidWakeUp((ev) => {});
 
 
 // Finally, connect to the Stream Deck.

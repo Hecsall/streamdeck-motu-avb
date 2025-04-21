@@ -14,11 +14,7 @@ Using `Node 20.19.0`:
 
 ## TODO
 
-- Filter datastore values
 - Enhance Property inspector UI and endpoint setting field
-- `ToggleValues` Action
-- `SetValue` Action
-- Cleanup trace logs (also set a different loglevel)
 - Rename from `motu-avb-canary` to `motu-avb`
 
 > **Disclaimer**

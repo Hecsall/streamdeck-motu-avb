@@ -71,60 +71,6 @@ export class MotuApi {
         return this.motuUrl
     }
 
-    // TODO
-    // private filterDatastore(datastore: MotuDatastoreResponse): MotuDatastoreResponse {
-    //     // Filter the datastore to only include relevant endpoints
-        
-    //     const BOOLEAN_CHANNELS = ["send", "enable", "mute", "solo", "mode", "limit"]
-
-    //     const FLOAT_CHANNELS = [
-    //         "fader",
-    //         "ratio",
-    //         "threshold",
-    //         "trim",
-    //         "release",
-    //         "attack",
-    //         "freq",
-    //         "gain",
-    //         "bw",
-    //         "makeup",
-    //         "peak",
-    //         "pan",
-    //         "reduction",
-    //         "reverbtime",
-    //         "mod",
-    //         "tailspread",
-    //         "predelay",
-    //         "hf",
-    //         "mfratio",
-    //         "mf",
-    //         "hfratio",
-    //         "avail"
-    //     ]
-
-    //     const ALL_CHANNELS = [
-    //         ...BOOLEAN_CHANNELS,
-    //         ...FLOAT_CHANNELS
-    //     ]
-
-    //     const booleanRegex = new RegExp(`^mix\/(.*)\/(.*)\/(.*)\/(${BOOLEAN_CHANNELS.join('|')})$`);
-    //     const floatRegex = new RegExp(`^mix\/(.*)\/(.*)\/(.*)\/(${FLOAT_CHANNELS.join('|')})$`);
-    //     const allRegex = new RegExp(`^mix\/(.*)\/(.*)\/(.*)\/(${ALL_CHANNELS.join('|')})$`);
-        
-    //     const filteredDatastore: MotuDatastoreResponse = {};
-        
-    //     for (const key in datastore) {
-    //         const value = datastore[key];
-
-    //         // Filter the datastore to only include relevant endpoints
-    //         if (booleanRegex.test(key)) {
-    //             filteredDatastore[key] = value;
-    //         }
-    //     }
-
-    //     return datastore;
-    // }
-
     /**
      * Fetches the entire datastore from the base MOTU URL and stores it internally.
      */
@@ -137,8 +83,6 @@ export class MotuApi {
         if (!res.ok) throw new Error(`GET ${this.motuUrl} failed: ${res.status}`);
 
         const data = await res.json() as MotuDatastoreResponse;
-        // TODO: filter datastore and save only relevant endpoints
-        // const filteredDatastore = this.filterDatastore(data);
         this.updateDatetime = new Date();
 
         return data;
