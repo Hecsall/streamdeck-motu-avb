@@ -4,6 +4,21 @@ const connectionForm = document.getElementById('connection-form');
 const motuUrlInput = document.getElementById('motuUrl');
 const connectionButton = document.getElementById('connection-button');
 
+// Help buttons hide/show logic
+const helpButtons = document.querySelectorAll('.help-button');
+helpButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const helpText = button.nextElementSibling;
+        if (helpText.style.display === 'none') {
+            helpText.style.display = 'block';
+        }
+        else {
+            helpText.style.display = 'none';
+        }
+    }
+    );
+});
+
 streamDeckClient.getGlobalSettings().then((globalSettings) => {
     console.log(globalSettings);
    

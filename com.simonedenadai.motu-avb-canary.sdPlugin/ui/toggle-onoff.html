@@ -11,9 +11,17 @@
         <sdpi-range setting="incrementBy" min="1" max="5" step="1" default="1" showlabels></sdpi-range>
     </sdpi-item> -->
 
-    
+
     <sdpi-item>
-        <h3>API Connection</h3>
+        <div class="title-with-help">
+            <h3>API Connection</h3>
+
+            <button class="help-button">[Help]</button>
+            <div style="display: none">
+                For compatible MOTU AVB devices, the API URL is the URL of your MOTU device web interface, adding a "<b>/datastore</b>" at the end.<br/>
+                If the API URL is not valid, the Endpoint selector will not populate.
+            </div>
+        </div>
     </sdpi-item>
 
     <form id="connection-form">
@@ -33,7 +41,15 @@
 
  
     <sdpi-item>
-        <h3>Configuration</h3>
+        <div class="title-with-help">
+            <h3>Configuration</h3>
+
+            <button class="help-button">[Help]</button>
+            <div style="display: none">
+                If you don't know what endpoint you need to select, you can simply change the parameter you want to control on the web interface, 
+                then open to the API URL set above on your browser and, at the very bottom, you should see the last changed parameter.
+            </div>
+        </div>
     </sdpi-item>
 
     <sdpi-item label="Endpoint">
