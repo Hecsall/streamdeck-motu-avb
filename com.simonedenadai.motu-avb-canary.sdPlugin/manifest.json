@@ -21,6 +21,24 @@
 					"Image": "imgs/actions/toggle-on-off/toggle-on"
 				}
 			]
+		},
+		{
+			"Name": "Toggle Values",
+			"UUID": "com.simonedenadai.motu-avb-canary.togglevalues",
+			"Icon": "imgs/actions/toggle-values/icon",
+			"Tooltip": "Toggle a MOTU AVB endpoint between one value and another",
+			"PropertyInspectorPath": "ui/toggle-values.html",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/toggle-values/toggle-off"
+				},
+				{
+					"Image": "imgs/actions/toggle-values/toggle-on"
+				}
+			]
 		}
 	],
 	"Category": "MOTU AVB",

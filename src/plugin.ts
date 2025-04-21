@@ -1,5 +1,6 @@
 import streamDeck, { JsonObject, LogLevel } from "@elgato/streamdeck";
 import { ToggleOnOff } from "./actions/toggle-onoff";
+import { ToggleValues } from "./actions/toggle-values";
 import { MotuApi } from "./motu-avb-api";
 
 
@@ -11,7 +12,7 @@ const motuApi = MotuApi.getInstance();
 
 // Register the increment action.
 streamDeck.actions.registerAction(new ToggleOnOff());
-// streamDeck.actions.registerAction(new ToggleValues());
+streamDeck.actions.registerAction(new ToggleValues());
 // streamDeck.actions.registerAction(new SetValue());
 
 
