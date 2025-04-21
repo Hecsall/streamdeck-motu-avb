@@ -39,6 +39,21 @@
 					"Image": "imgs/actions/toggle-values/toggle-on"
 				}
 			]
+		},
+		{
+			"Name": "Set Value",
+			"UUID": "com.simonedenadai.motu-avb-canary.setvalue",
+			"Icon": "imgs/actions/set-value/icon",
+			"Tooltip": "Set a MOTU AVB endpoint to a specific value",
+			"PropertyInspectorPath": "ui/set-value.html",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/set-value/set-value"
+				}
+			]
 		}
 	],
 	"Category": "MOTU AVB",

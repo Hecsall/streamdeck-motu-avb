@@ -1,7 +1,8 @@
 import streamDeck, { JsonObject, LogLevel } from "@elgato/streamdeck";
+import { MotuApi } from "./motu-avb-api";
 import { ToggleOnOff } from "./actions/toggle-onoff";
 import { ToggleValues } from "./actions/toggle-values";
-import { MotuApi } from "./motu-avb-api";
+import { SetValue } from "./actions/set-value";
 
 
 // We can enable "trace" logging so that all messages between the Stream Deck, and the plugin are recorded. When storing sensitive information
@@ -13,7 +14,7 @@ const motuApi = MotuApi.getInstance();
 // Register the increment action.
 streamDeck.actions.registerAction(new ToggleOnOff());
 streamDeck.actions.registerAction(new ToggleValues());
-// streamDeck.actions.registerAction(new SetValue());
+streamDeck.actions.registerAction(new SetValue());
 
 
 // Listen for global settings changes and update MotuApi

@@ -12,7 +12,7 @@ type ToggleValuesSettings = {
 
 
 /**
- * Action to toggle an ON/OFF endpoint (1/0) on the MOTU AVB device.
+ * Action to toggle an endpoint between two values.
  */
 @action({ UUID: "com.simonedenadai.motu-avb-canary.togglevalues" })
 export class ToggleValues extends SingletonAction<ToggleValuesSettings> {
@@ -30,12 +30,6 @@ export class ToggleValues extends SingletonAction<ToggleValuesSettings> {
 
         if (datastore && endpoint) {
             const currentValue = datastore[endpoint];
-
-            streamDeck.logger.trace(`["action"] Current value:`, currentValue);
-            streamDeck.logger.trace(`["action"] Current value:`, typeof currentValue);
-            streamDeck.logger.trace(`["action"] Onvalue:`, onValue);
-            streamDeck.logger.trace(`["action"] Onvalue:`, typeof onValue);
-            streamDeck.logger.trace(`["action"] mmmm:`, currentValue === onValue);
 
             if (ev.action.isKey()){
                 await ev.action.setState(currentValue === onValue ? 1 : 0);
@@ -112,7 +106,7 @@ export class ToggleValues extends SingletonAction<ToggleValuesSettings> {
 
         if (event === "getEndpoints") {
             // Filter for boolean-only endpoints
-            const endpoints = Object.keys(datastore).filter((endpoint) => this.motuApi.booleanRegex.test(endpoint));
+            const endpoints = Object.keys(datastore).filter((endpoint) => this.motuApi.allRegex.test(endpoint));
             
             await streamDeck.ui.current?.sendToPropertyInspector({
                 event, 
