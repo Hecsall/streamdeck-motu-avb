@@ -12,7 +12,7 @@ type ToggleOnOffSettings = {
 /**
  * Action to toggle an ON/OFF endpoint (1/0).
  */
-@action({ UUID: "com.simonedenadai.motu-avb-canary.toggleonoff" })
+@action({ UUID: "com.simonedenadai.motu-avb.toggleonoff" })
 export class ToggleOnOff extends SingletonAction<ToggleOnOffSettings> {
     private motuApi = MotuApi.getInstance();
 

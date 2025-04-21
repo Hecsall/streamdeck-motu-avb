@@ -1,7 +1,7 @@
 {
     "scripts": {
         "build": "rollup -c",
-        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.simonedenadai.motu-avb-canary\""
+        "watch": "rollup -c -w --watch.onEnd=\"streamdeck restart com.simonedenadai.motu-avb\""
     },
     "type": "module",
     "engines": {

@@ -6,7 +6,7 @@
 	"Actions": [
 		{
 			"Name": "Toggle ON/OFF",
-			"UUID": "com.simonedenadai.motu-avb-canary.toggleonoff",
+			"UUID": "com.simonedenadai.motu-avb.toggleonoff",
 			"Icon": "imgs/actions/toggle-on-off/icon",
 			"Tooltip": "Toggle a MOTU AVB endpoint between ON (1) and OFF (0)",
 			"PropertyInspectorPath": "ui/toggle-onoff.html",
@@ -24,7 +24,7 @@
 		},
 		{
 			"Name": "Toggle Values",
-			"UUID": "com.simonedenadai.motu-avb-canary.togglevalues",
+			"UUID": "com.simonedenadai.motu-avb.togglevalues",
 			"Icon": "imgs/actions/toggle-values/icon",
 			"Tooltip": "Toggle a MOTU AVB endpoint between one value and another",
 			"PropertyInspectorPath": "ui/toggle-values.html",
@@ -42,7 +42,7 @@
 		},
 		{
 			"Name": "Set Value",
-			"UUID": "com.simonedenadai.motu-avb-canary.setvalue",
+			"UUID": "com.simonedenadai.motu-avb.setvalue",
 			"Icon": "imgs/actions/set-value/icon",
 			"Tooltip": "Set a MOTU AVB endpoint to a specific value",
 			"PropertyInspectorPath": "ui/set-value.html",
@@ -79,5 +79,5 @@
 		"Version": "20",
 		"Debug": "enabled"
 	},
-	"UUID": "com.simonedenadai.motu-avb-canary"
+	"UUID": "com.simonedenadai.motu-avb"
 }

@@ -6,7 +6,7 @@ import path from "node:path";
 import url from "node:url";
 
 const isWatching = !!process.env.ROLLUP_WATCH;
-const sdPlugin = "com.simonedenadai.motu-avb-canary.sdPlugin";
+const sdPlugin = "com.simonedenadai.motu-avb.sdPlugin";
 
 /**
  * @type {import('rollup').RollupOptions}

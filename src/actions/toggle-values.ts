@@ -14,7 +14,7 @@ type ToggleValuesSettings = {
 /**
  * Action to toggle an endpoint between two values.
  */
-@action({ UUID: "com.simonedenadai.motu-avb-canary.togglevalues" })
+@action({ UUID: "com.simonedenadai.motu-avb.togglevalues" })
 export class ToggleValues extends SingletonAction<ToggleValuesSettings> {
     private motuApi = MotuApi.getInstance();
 

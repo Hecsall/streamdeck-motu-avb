@@ -13,7 +13,7 @@ type SetValueSettings = {
 /**
  * Action to set a single Value.
  */
-@action({ UUID: "com.simonedenadai.motu-avb-canary.setvalue" })
+@action({ UUID: "com.simonedenadai.motu-avb.setvalue" })
 export class SetValue extends SingletonAction<SetValueSettings> {
     private motuApi = MotuApi.getInstance();
 
