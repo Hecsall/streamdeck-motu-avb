@@ -1,31 +1,60 @@
 # MOTU AVB Plugin for StreamDeck (Unofficial)
 
-This StreamDeck Plugin allows you to change parameters on your MOTU audio interface over API.
-Only interfaces that are compatible with the [MOTU AVB Datastore API](https://cdn-data.motu.com/downloads/audio/AVB/docs/MOTU%20AVB%20Web%20API.pdf) will work.
+Control your MOTU audio interface directly from your StreamDeck using the MOTU AVB Web API.
+
+> This plugin is unofficial and not affiliated with MOTU, Inc.
+
+Only interfaces compatible with the [MOTU AVB Datastore API](https://cdn-data.motu.com/downloads/audio/AVB/docs/MOTU%20AVB%20Web%20API.pdf) are supported.  
+Tested with the **UltraLite AVB** — other AVB-enabled MOTU devices *may* work as well.
 
 ![MOTU AVB StreamDeck Plugin](preview.png)
 
-## Actions
+---
 
-**Toggle ON/OFF** [ 0 &rarr; 1 &rarr; 0 ] \
-Switches an endpoint between 0 and 1, useful for Mute, Solo, and other UI elements that can be switched on and off;
+## 🎛️ Available Actions
 
-**Toggle Values** [ X &rarr; Y &rarr; X ] \
-Switches an endpoint between 2 user-defined values, useful if you need to jump between 2 different dB values on faders, for example;
+### 🔁 Toggle ON/OFF
 
-**Set Value** [ &rarr; X ] \
-This will set an endpoint to a specific value, this is a single press action, not a toggle;
+Switches a value between `0` and `1`.  
+Useful for toggling **Mute**, **Solo**, or any other binary parameter.
 
-## Development
+### 🔁 Toggle Between Values
 
-Using `Node 20.19.0`:
+Switches between two user-defined values (e.g., `-3 dB` ↔ `0 dB`).  
+Great for flipping faders or toggling specific "non-binary" settings.
 
-- `npm install -g @elgato/cli`
-- `npm install`
-- `streamdeck link com.simonedenadai.motu-avb.sdPlugin`
-- `npm run watch`
+### 🎯 Set Value
+
+Sets a fixed value on a parameter with a single button press.  
+(Not a toggle.)
+
+> 💡 All actions come with a simple configuration UI, including help text. No setup on the MOTU interface is required.
 
 ---
 
-> **Disclaimer**
-    All product and company names are trademarks™ or registered® trademarks of their respective holders. Use of them does not imply any affiliation with or endorsement by them.
+### 📦 Installation
+
+Download the `.streamDeckPlugin` file in the GitHub releases section and double-click to install.
+StreamDeck will take care of the rest.
+
+---
+
+## 🧪 Development
+
+Built with **Node.js v20.19.0**
+
+```bash
+npm install -g @elgato/cli
+npm install
+streamdeck link com.simonedenadai.motu-avb.sdPlugin
+npm run watch
+```
+
+This links the plugin to your StreamDeck and enables live development with hot reload.
+
+---
+
+### ⚠️ Disclaimer
+
+All product and company names are trademarks™ or registered® trademarks of their respective holders.
+Use of them does not imply any affiliation with or endorsement by them.
