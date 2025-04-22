@@ -55,23 +55,29 @@ streamDeckClient.getGlobalSettings().then((globalSettings) => {
                             console.log(`Connected to MOTU AVB API at ${motuUrl}`);
                             const cleanedUrl = motuUrl.replace(/\/+$/, "")
                             streamDeckClient.setGlobalSettings({ ...globalSettings, motuUrl: cleanedUrl });
+                            motuUrlInput.classList.remove('invalid');
+                            motuUrlInput.classList.add('valid');
 
-                            // Wait 1.5 then refresh the enpoint input to get the updated datastore endpoints
+                            // Wait 1.5s then refresh the enpoint input to get the updated datastore endpoints
                             setTimeout(() => {
                                 document.querySelector('#endpoint').refresh();
                             }, 1500);
                             return
                         }
-
-                        throw new Error('Invalid response from MOTU API');
                     });
-                } else {
-                    throw new Error('Invalid response from MOTU API');
                 }
+
+                throw new Error('Invalid response from MOTU API');
+            }).catch((error) => {
+                motuUrlInput.classList.add('invalid');
+                motuUrlInput.classList.remove('valid');
+                console.error(error);
             }).finally(() => {
                 connectionButton.textContent = 'Connect';
             })
         } else {
+            motuUrlInput.classList.add('invalid');
+            motuUrlInput.classList.remove('valid');
             console.error('Please enter a valid MOTU AVB API URL');
         }
     });

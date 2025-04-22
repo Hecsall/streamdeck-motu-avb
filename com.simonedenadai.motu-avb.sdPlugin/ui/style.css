@@ -19,3 +19,11 @@ h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-family);
     font-size: var(--font-size);
 }
+
+.invalid {
+    --input-bg-color: rgb(85, 6, 6);
+}
+
+.valid {
+    --input-bg-color: rgb(7, 58, 7);
+}
