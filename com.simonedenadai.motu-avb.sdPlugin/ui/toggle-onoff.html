@@ -47,7 +47,11 @@
     </sdpi-item>
 
     <sdpi-item label="Endpoint">
-        <sdpi-select id="endpoint" setting="endpoint" datasource="getEndpoints" loading="Fetching endpoints..." hot-reload placeholder="Please choose an endpoint"></sdpi-select>
+        <sdpi-textfield id="search-endpoint" placeholder="Search..."></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item>
+        <sdpi-select id="endpoint" setting="endpoint" datasource="getEndpoints" loading="Fetching endpoints..." hot-reload placeholder="Please choose an endpoint" required></sdpi-select>
     </sdpi-item>
 
 

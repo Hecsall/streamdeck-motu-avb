@@ -3,6 +3,7 @@ const { streamDeckClient } = SDPIComponents;
 const connectionForm = document.getElementById('connection-form');
 const motuUrlInput = document.getElementById('motuUrl');
 const connectionButton = document.getElementById('connection-button');
+const searchInput = document.getElementById('search-endpoint');
 
 // Help buttons hide/show logic
 const helpButtons = document.querySelectorAll('.help-button');
@@ -19,9 +20,20 @@ helpButtons.forEach((button) => {
     );
 });
 
-streamDeckClient.getGlobalSettings().then((globalSettings) => {
-    console.log(globalSettings);
-   
+searchInput.addEventListener('input', (event) => {
+    const searchValue = event.target.value.toLowerCase();
+    const endpointOptions = document.querySelector('#endpoint').shadowRoot.querySelectorAll("option");
+    console.log(endpointOptions);
+    endpointOptions.forEach((option) => {
+        if (option.textContent.toLowerCase().includes(searchValue)) {
+            option.style.display = 'block';
+        } else {
+            option.style.display = 'none';
+        }
+    });
+});
+
+streamDeckClient.getGlobalSettings().then((globalSettings) => {   
     // Populate the motuUrl input field with the saved URL
     if (globalSettings.motuUrl) {
         motuUrlInput.value = globalSettings.motuUrl;
