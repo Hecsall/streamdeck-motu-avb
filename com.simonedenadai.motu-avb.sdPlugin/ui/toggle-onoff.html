@@ -1,0 +1,60 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Toggle ON/OFF Property Inspector</title>
+    <script src="https://sdpi-components.dev/releases/v4/sdpi-components.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <sdpi-item>
+        <div class="title-with-help">
+            <h3>API Connection</h3>
+
+            <button class="help-button">[Help]</button>
+            <div style="display: none">
+                For compatible MOTU AVB devices, the API URL is the URL of your MOTU device web interface, adding a "<b>/datastore</b>" at the end.<br/>
+                If the API URL is not valid, the Endpoint selector will not populate.
+            </div>
+        </div>
+    </sdpi-item>
+
+    <form id="connection-form">
+        <sdpi-item label="API URL" title="Enter your MOTU AVB Datastore API URL">
+            <sdpi-textfield
+                id="motuUrl"
+                placeholder="http://localhost:1280/abc123/datastore"
+                pattern="https?:\/\/(?:w{1,3}\.)?[^\s.]+(?:\.[a-z]+)*(?::\d+)?(?![^<]*(?:<\/\w+>|\/?>))"
+                required
+            ></sdpi-textfield>
+        </sdpi-item>
+    
+        <sdpi-item>
+            <sdpi-button id="connection-button">Connect</sdpi-button>
+        </sdpi-item>
+    </form>
+
+ 
+    <sdpi-item>
+        <div class="title-with-help">
+            <h3>Configuration</h3>
+
+            <button class="help-button">[Help]</button>
+            <div style="display: none">
+                If you don't know what endpoint you need to select, you can simply change the parameter you want to control on the web interface, 
+                then open to the API URL set above on your browser and, at the very bottom, you should see the last changed parameter.
+            </div>
+        </div>
+    </sdpi-item>
+
+    <sdpi-item label="Endpoint">
+        <sdpi-textfield id="search-endpoint" placeholder="Search..."></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item>
+        <sdpi-select id="endpoint" setting="endpoint" datasource="getEndpoints" loading="Fetching endpoints..." hot-reload placeholder="Please choose an endpoint" required></sdpi-select>
+    </sdpi-item>
+
+
+    <script src="script.js"></script>
+</body>
+</html>

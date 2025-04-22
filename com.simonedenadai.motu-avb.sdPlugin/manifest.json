@@ -1,0 +1,83 @@
+{
+	"Name": "MOTU AVB",
+	"Version": "2.0.0.0",
+	"Author": "Simone De Nadai",
+	"URL": "https://github.com/Hecsall/streamdeck-motu-avb",
+	"Actions": [
+		{
+			"Name": "Toggle ON/OFF",
+			"UUID": "com.simonedenadai.motu-avb.toggleonoff",
+			"Icon": "imgs/actions/toggle-on-off/icon",
+			"Tooltip": "Toggle a MOTU AVB endpoint between ON (1) and OFF (0)",
+			"PropertyInspectorPath": "ui/toggle-onoff.html",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/toggle-on-off/toggle-off"
+				},
+				{
+					"Image": "imgs/actions/toggle-on-off/toggle-on"
+				}
+			]
+		},
+		{
+			"Name": "Toggle Values",
+			"UUID": "com.simonedenadai.motu-avb.togglevalues",
+			"Icon": "imgs/actions/toggle-values/icon",
+			"Tooltip": "Toggle a MOTU AVB endpoint between one value and another",
+			"PropertyInspectorPath": "ui/toggle-values.html",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/toggle-values/toggle-off"
+				},
+				{
+					"Image": "imgs/actions/toggle-values/toggle-on"
+				}
+			]
+		},
+		{
+			"Name": "Set Value",
+			"UUID": "com.simonedenadai.motu-avb.setvalue",
+			"Icon": "imgs/actions/set-value/icon",
+			"Tooltip": "Set a MOTU AVB endpoint to a specific value",
+			"PropertyInspectorPath": "ui/set-value.html",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/set-value/set-value"
+				}
+			]
+		}
+	],
+	"Category": "MOTU AVB",
+	"CategoryIcon": "imgs/plugin/category-icon",
+	"CodePath": "bin/plugin.js",
+	"Description": "Control your MOTU Audio interface over MOTU AVB Datastore API",
+	"Icon": "imgs/plugin/marketplace",
+	"SDKVersion": 2,
+	"Software": {
+		"MinimumVersion": "6.4"
+	},
+	"OS": [
+		{
+			"Platform": "mac",
+			"MinimumVersion": "12"
+		},
+		{
+			"Platform": "windows",
+			"MinimumVersion": "10"
+		}
+	],
+	"Nodejs": {
+		"Version": "20",
+		"Debug": "enabled"
+	},
+	"UUID": "com.simonedenadai.motu-avb"
+}
