@@ -4,6 +4,7 @@ import { ToggleOnOff } from "./actions/toggle-onoff";
 import { ToggleValues } from "./actions/toggle-values";
 import { SetValue } from "./actions/set-value";
 import { RawToggle } from "./actions/raw-toggle";
+import { RawSet } from "./actions/raw-set";
 
 
 // We can enable "trace" logging so that all messages between the Stream Deck, and the plugin are recorded. When storing sensitive information
@@ -17,6 +18,7 @@ streamDeck.actions.registerAction(new ToggleOnOff());
 streamDeck.actions.registerAction(new ToggleValues());
 streamDeck.actions.registerAction(new SetValue());
 streamDeck.actions.registerAction(new RawToggle());
+streamDeck.actions.registerAction(new RawSet());
 
 
 // Listen for global settings changes and update MotuApi

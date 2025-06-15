@@ -72,6 +72,21 @@
 					"Image": "imgs/actions/raw-toggle/toggle-on"
 				}
 			]
+		},
+		{
+			"Name": "Raw Set",
+			"UUID": "com.simonedenadai.motu-avb.rawset",
+			"Icon": "imgs/actions/raw-set/icon",
+			"Tooltip": "Set an arbitrary MOTU AVB endpoint to a specific value",
+			"PropertyInspectorPath": "ui/raw-set.html",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/raw-set/set-value"
+				}
+			]
 		}
 	],
 	"Category": "MOTU AVB",
