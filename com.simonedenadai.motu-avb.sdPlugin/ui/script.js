@@ -20,7 +20,7 @@ helpButtons.forEach((button) => {
     );
 });
 
-searchInput.addEventListener('input', (event) => {
+searchInput?.addEventListener('input', (event) => {
     const searchValue = event.target.value.toLowerCase();
     const endpointOptions = document.querySelector('#endpoint').shadowRoot.querySelectorAll("option");
     console.log(endpointOptions);

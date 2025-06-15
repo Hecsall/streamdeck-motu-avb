@@ -28,6 +28,16 @@ Great for flipping faders or toggling specific "non-binary" settings.
 Sets a fixed value on a parameter with a single button press.  
 (Not a toggle.)
 
+### 🔁 Raw Toggle (advanced)
+
+Same as the Toggle Values action, but the endpoint field is a string. This way you can specify the MOTU endpoint you want, even the ones not included in the standard actions dropdown.
+Empty "OFF Value" field is treated as an empty string (`""`).
+
+### 🎯 Raw Set (advanced)
+
+Same as the Set Value action, but the endpoint field is a string. This way you can specify the MOTU endpoint you want, even the ones not included in the standard actions dropdown.
+Empty "Value" field is treated as an empty string (`""`).
+
 > 💡 All actions come with a simple configuration UI, including help text. No setup on the MOTU interface is required.
 
 ---
