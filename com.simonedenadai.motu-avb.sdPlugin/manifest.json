@@ -54,6 +54,24 @@
 					"Image": "imgs/actions/set-value/set-value"
 				}
 			]
+		},
+		{
+			"Name": "Raw Toggle",
+			"UUID": "com.simonedenadai.motu-avb.rawtoggle",
+			"Icon": "imgs/actions/raw-toggle/icon",
+			"Tooltip": "Toggle an arbitrary MOTU AVB endpoint between one value and another",
+			"PropertyInspectorPath": "ui/raw-toggle.html",
+			"Controllers": [
+				"Keypad"
+			],
+			"States": [
+				{
+					"Image": "imgs/actions/raw-toggle/toggle-off"
+				},
+				{
+					"Image": "imgs/actions/raw-toggle/toggle-on"
+				}
+			]
 		}
 	],
 	"Category": "MOTU AVB",
