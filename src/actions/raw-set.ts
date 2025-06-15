@@ -56,22 +56,4 @@ export class RawSet extends SingletonAction<RawSetSettings> {
         // StreamDeck SDK automatically switches state when you press the key
         // no need to set it manually.
     }
-
-    // onSendToPlugin is called when property inspector calls the plugin to get data using the datasource attribute
-    override async onSendToPlugin(ev: SendToPluginEvent<JsonValue, RawSetSettings>): Promise<void> {
-        const {event} = ev.payload as JsonObject;
-
-        const globalSettings = await streamDeck.settings.getGlobalSettings();
-        const datastore = globalSettings.datastore as JsonObject || {};
-
-        if (event === "getEndpoints") {
-            // Filter for boolean and float endpoints
-            const endpoints = Object.keys(datastore).filter((endpoint) => this.motuApi.allRegex.test(endpoint));
-            
-            await streamDeck.ui.current?.sendToPropertyInspector({
-                event, 
-                items: endpoints.map((endpoint) => ({label: endpoint, value: endpoint})),
-            });
-        }
-    }
 }
