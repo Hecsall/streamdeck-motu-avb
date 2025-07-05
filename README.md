@@ -5,7 +5,7 @@ Control your MOTU audio interface directly from your StreamDeck using the MOTU A
 > This plugin is unofficial and not affiliated with MOTU, Inc.
 
 Only interfaces compatible with the [MOTU AVB Datastore API](https://cdn-data.motu.com/downloads/audio/AVB/docs/MOTU%20AVB%20Web%20API.pdf) are supported.  
-Tested with the **UltraLite AVB** — other AVB-enabled MOTU devices *may* work as well.
+Tested with the **UltraLite AVB** - other AVB-enabled MOTU devices *may* work as well.
 
 ![MOTU AVB StreamDeck Plugin](preview.png)
 
