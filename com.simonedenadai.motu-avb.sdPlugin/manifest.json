@@ -87,6 +87,19 @@
 					"Image": "imgs/actions/raw-set/set-value"
 				}
 			]
+		},
+		{
+			"Name": "Dial Value",
+			"UUID": "com.simonedenadai.motu-avb.dialvalue",
+			"Icon": "imgs/actions/dial-value/icon",
+			"Tooltip": "Rotate to increment/decrement an endpoint value; press to set another endpoint",
+			"PropertyInspectorPath": "ui/dial-value.html",
+			"Controllers": [
+				"Encoder"
+			],
+			"Encoder": {
+				"layout": "$X1"
+			}
 		}
 	],
 	"Category": "MOTU AVB",

@@ -1,0 +1,88 @@
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Dial Value Property Inspector</title>
+    <script src="https://sdpi-components.dev/releases/v4/sdpi-components.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <sdpi-item>
+        <div class="title-with-help">
+            <h3>API Connection</h3>
+
+            <button class="help-button">[Help]</button>
+            <div style="display: none">
+                For compatible MOTU AVB devices, the API URL is the URL of your MOTU device web interface, adding a "<b>/datastore</b>" at the end.<br/>
+                If the API URL is not valid, the Endpoint selector will not populate.
+            </div>
+        </div>
+    </sdpi-item>
+
+    <form id="connection-form">
+        <sdpi-item label="API URL" title="Enter your MOTU AVB Datastore API URL">
+            <sdpi-textfield
+                id="motuUrl"
+                placeholder="http://localhost:1280/abc123/datastore"
+                pattern="https?:\/\/[^\s/:]+(?::\d+)?(?:\/\S*)?"
+                required
+            ></sdpi-textfield>
+        </sdpi-item>
+
+        <sdpi-item>
+            <sdpi-button id="connection-button">Connect</sdpi-button>
+        </sdpi-item>
+    </form>
+
+
+    <sdpi-item>
+        <div class="title-with-help">
+            <h3>Rotation</h3>
+
+            <button class="help-button">[Help]</button>
+            <div style="display: none">
+                When the dial is rotated, the plugin will read the current value of the <b>Rotation Endpoint</b> and add or subtract the <b>Step</b> for each tick.<br/><br/>
+                Rotating clockwise increases the value, counter-clockwise decreases it.<br/><br/>
+                The step is in <b>dB</b> — the plugin handles the conversion to the amplitude ratio value expected by the API.<br/><br/>
+                Endpoint example: <b>mix/chan/0/matrix/fader</b>
+            </div>
+        </div>
+    </sdpi-item>
+
+    <sdpi-item label="Rotation Endpoint">
+        <sdpi-textfield id="rotateEndpoint" setting="rotateEndpoint" placeholder="e.g. mix/chan/0/matrix/fader"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="Step per tick (dB)">
+        <sdpi-textfield id="rotateDelta" setting="rotateDelta" placeholder="1" pattern="^-?([0-9]*[.])?[0-9]+$"></sdpi-textfield>
+    </sdpi-item>
+
+
+    <sdpi-item>
+        <div class="title-with-help">
+            <h3>Dial Press</h3>
+
+            <button class="help-button">[Help]</button>
+            <div style="display: none">
+                When the dial is pressed down, the plugin will set the <b>Press Endpoint</b> to the specified <b>Press Value</b>.<br/><br/>
+                Leave all fields empty if you don't need the press action.<br/><br/>
+                Endpoint example: <b>mix/chan/0/matrix/mute</b>
+            </div>
+        </div>
+    </sdpi-item>
+
+    <sdpi-item label="Press Endpoint">
+        <sdpi-textfield id="pressEndpoint" setting="pressEndpoint" placeholder="e.g. mix/chan/0/matrix/mute"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="ON Value">
+        <sdpi-textfield id="pressOnValue" setting="pressOnValue" placeholder="Value when ON" pattern="^-?([0-9]*[.])?[0-9]+$"></sdpi-textfield>
+    </sdpi-item>
+
+    <sdpi-item label="OFF Value">
+        <sdpi-textfield id="pressOffValue" setting="pressOffValue" placeholder="Value when OFF" pattern="^-?([0-9]*[.])?[0-9]+$"></sdpi-textfield>
+    </sdpi-item>
+
+
+    <script src="script.js"></script>
+</body>
+</html>

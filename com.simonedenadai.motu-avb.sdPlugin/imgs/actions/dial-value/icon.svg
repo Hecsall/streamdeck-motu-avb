@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none">
+  <!-- Dial circle -->
+  <circle cx="20" cy="20" r="13" stroke="#EFEFEF" stroke-width="2.5" fill="none"/>
+  <!-- Rotation indicator tick at top -->
+  <line x1="20" y1="7" x2="20" y2="11" stroke="#EFEFEF" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Arrows indicating rotation -->
+  <path d="M10 14 A11 11 0 0 1 20 9" stroke="#EFEFEF" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M9.5 13.5 L10 14 L11 11.5" stroke="#EFEFEF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

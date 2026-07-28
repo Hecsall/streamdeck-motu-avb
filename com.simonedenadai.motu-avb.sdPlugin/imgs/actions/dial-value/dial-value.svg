@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="144" height="144" fill="none">
+  <path fill="#2774D3" d="M0 0h144v144H0z"/>
+  <!-- Dial outer ring -->
+  <circle cx="72" cy="72" r="46" stroke="white" stroke-width="8" fill="none"/>
+  <!-- Rotation indicator tick at top -->
+  <line x1="72" y1="26" x2="72" y2="42" stroke="white" stroke-width="8" stroke-linecap="round"/>
+  <!-- Counter-clockwise arrow arc -->
+  <path d="M38 55 A40 40 0 0 1 72 32" stroke="white" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M38 55 L30 48 M38 55 L45 50" stroke="white" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Clockwise arrow arc -->
+  <path d="M106 55 A40 40 0 0 0 72 32" stroke="white" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M106 55 L114 48 M106 55 L99 50" stroke="white" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
